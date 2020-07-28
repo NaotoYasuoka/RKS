@@ -109,6 +109,7 @@ function OD_makeCell(value){
       break;
 
     default:
+      return_value = value;
       break;
   }
   return return_value;
@@ -122,26 +123,25 @@ function OD_stateUpedate(List, buttonID){
   OD_cellNum = splitID[1];
   switch(splitID[0]){
     case "back":
-      editRecord("Galley", GalleyList[OD_cellNum][0], GalleyList[OD_cellNum][1], GalleyList[OD_cellNum][2], "state", GalleyList[OD_cellNum][3]-1).then(function(r){
-        OD_loadTable();
+      var status = GalleyList[OD_cellNum][3]-1;
+      break;
 
-      }).catch(function (e){
-        alert(e);
-
-      });
-      
     case "next":
       /* データベース */
-      editRecord("Galley", GalleyList[OD_cellNum][0], GalleyList[OD_cellNum][1], GalleyList[OD_cellNum][2], "state", GalleyList[OD_cellNum][3]+1).then(function(r){
-        OD_loadTable();
-
-      }).catch(function (e){
-        alert(e);
-      });
+      var status = GalleyList[OD_cellNum][3]+1;
+      break;
 
     default:
      break;
   }
+
+  editRecord("Galley", GalleyList[OD_cellNum][0], GalleyList[OD_cellNum][1], GalleyList[OD_cellNum][2], "state", status).then(function(r){
+    OD_loadTable();
+
+  }).catch(function (e){
+    alert(e);
+
+  });
 
 }
 
