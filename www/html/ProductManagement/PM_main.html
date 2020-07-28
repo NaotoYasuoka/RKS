@@ -1,0 +1,34 @@
+<!-- html/ProductManagement/PM_main.html -->
+<ons-page id="ProductManagement">
+  
+  <ons-toolbar>
+    <div class="left">
+      <ons-toolbar-button onclick="fn.open()">
+        <ons-icon icon="ion-ios-menu, material:md-menu"></ons-icon>
+       </ons-toolbar-button>
+    </div>
+    <div class="center">商品管理</div>
+  </ons-toolbar>
+
+
+  <!-- 商品管理テーブルの作成 --> 
+  <table width="100%" id="PM_table">
+    <tr>
+      <th bgcolor="#dcdcdc" class="PM_table1">厨房</th> 
+      <th bgcolor="#dcdcdc" class="PM_table2">在庫</th> 
+      <th bgcolor="#dcdcdc" class="PM_table3">商品名</th>
+      <th bgcolor="#dcdcdc" class="PM_table4">値段</th>
+    </tr>
+  </table>
+
+
+  <!-- 商品追加ボタンの作成 -->
+  <ons-fab position="bottom right">
+    <ons-icon onclick="addProductEdit(-1)" Show Dialog icon="md-plus"></ons-icon>
+  </ons-fab>
+
+  <ons-fab position="bottom left">
+    <ons-icon onclick="document.getElementById('navi').pushPage('html/OrderDisplay/OD_main.html')" Show Dialog icon="md-plus"> </ons-icon>
+  </ons-fab>
+
+</ons-page>

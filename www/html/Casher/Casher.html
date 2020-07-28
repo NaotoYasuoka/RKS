@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+
+<ons-page id="Casher" style="height: 100%;">
+	<ons-toolbar>
+		<div class="left">
+			<ons-toolbar-button onclick="fn.open()">
+				<ons-icon icon="ion-ios-menu, material:md-menu"></ons-icon>
+			</ons-toolbar-button>
+		</div>
+		<div class="center">
+			Casher
+		</div>
+	</ons-toolbar>
+	<ons-row style="height: 100%;">
+		<!-- 左側の商品ボタンたち -->
+		<ons-col width=70% style="height: 100%; overflow-y: scroll;">
+			<ons-list id="goodsList"></ons-list>
+		</ons-col>
+		<!-- 右側 -->
+		<ons-col width=30% style="height: 100%; overflow-y: scroll;">
+			<!-- カート -->
+			<ons-list id="pCart"></ons-list>
+		</ons-col>
+	</ons-row>
+	<!-- 小計・決定ボタン -->
+	<ons-row style="bottom:0px; right:0px; position:fixed; width:30%;">
+		<input type="number" readonly>
+		<input type="button" value="決定" width=100%></label>
+	</ons-row>
+</ons-page>

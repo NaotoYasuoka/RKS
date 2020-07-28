@@ -1,0 +1,56 @@
+/**/
+/* .upper{
+  font-size: 1.4em;
+  font-weight: bold;
+  padding: 10px 30px;
+  position:fixed;
+  right:0px;
+  bottom:0px;
+  transition:1s;
+  opacity:0.7;
+  background-color: rgb(209, 255, 134);
+}
+.upper:hover{
+  opacity:1; 
+} */
+
+/* .pList{
+  height: 100%;
+  overflow-y:scroll;
+}
+
+html {
+    height: 100%;
+}
+body {
+    height: 100%;
+    margin: 0;
+}
+ons-page {
+    height: 100%;
+    margin: 0;
+} */
+
+
+table{
+  border-collapse: collapse;
+  border:solid 1px #aaaaaa;
+  width: 100%;
+}
+th, td{
+  border-collapse: collapse;
+  border:solid 1px #aaaaaa;
+  padding : 10px 5px;
+}
+
+#result {
+  color: red;
+}
+
+.coler_back_red{
+  background: red;
+}
+
+.coler_back_brack{
+  background: #dadada;
+}

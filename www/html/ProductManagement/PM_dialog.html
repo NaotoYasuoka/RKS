@@ -1,0 +1,39 @@
+<!-- html/ProductManagement/PM_dialog.html -->
+<ons-alert-dialog id="PM_dialog" cancelable animation="none">
+
+  <div id="PM_addPE_Title" class="alert-dialog-title">商品追加画面</div>
+  <ons-list>
+    <ons-list-header>商品情報</ons-list-header>
+    <ons-list-item >
+        <input type="text" id="PM_textbox_1" class="text-input" placeholder="商品名">
+    </ons-list-item>
+
+    <ons-list-item >
+        <input type="number" id="PM_textbox_2" class="text-input" placeholder="値段">
+    </ons-list-item>
+
+    <ons-list-item>
+      <div class="center">厨房モードの表示</div>
+      <div class="right">
+        <ons-switch checked id="PM_switch_1"></ons-switch>
+      </div>
+    </ons-list-item>
+
+    <ons-list-item>
+      <div class="center">商品在庫あり</div>
+      <div class="right">
+        <ons-switch checked id="PM_switch_2"></ons-switch>
+      </div>
+    </ons-list-item>
+
+    <ons-list-item>
+      <div class="center">
+        <ons-button id="PM_deleteButton" onclick="deleteGoods('PM_dialog')">　削除　</ons-button>
+      </div>
+      <div class="right">
+        <ons-button onclick="saveGoods('PM_dialog')" id="PM_addButton" class="coler_back_red">　　決定　　</ons-button>
+      </div>
+    </ons-list-item>
+
+  </ons-list>
+</ons-alert-dialog>

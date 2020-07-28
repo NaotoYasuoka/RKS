@@ -1,0 +1,35 @@
+/* This is a CSS file */
+.OD_table1{
+  width:7%;
+}
+.OD_table2{
+  width:59%;
+}
+.OD_table3{
+  width:10%;
+}
+.OD_table4{
+  width:7%;
+  border-right: 1px solid rgba(255, 255, 255, 0);
+}
+.OD_table5{
+  width:10%;
+  border-right: 1px solid rgba(255, 255, 255, 0);
+}
+.OD_table6{
+  width:7%;
+}
+
+
+#OD_button {
+    max-width: 520px;
+    margin: 0 auto;
+    text-align: center;
+}
+.OD_button {
+    display: inline-block;
+    margin: 0 10px 25px;
+    text-align: center;
+    font-size: 20px;
+}
+
