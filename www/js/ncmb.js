@@ -121,6 +121,9 @@ var NCMB_PullRecords = function (success, failed, table) {
       break;
     case ("Galley"):
       Galley.fetchAll()
+        .order(GalleyKeys[0])
+        .order(GalleyKeys[1])
+        .order(GalleyKeys[2])
         .then(function (objs) {
           for (var i = 0; i < objs.length; ++i) {
             obj = objs[i]
