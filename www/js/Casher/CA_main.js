@@ -2,7 +2,7 @@
 
 var i = 0;
 document.addEventListener('show', function (event) {
-  if (event.target.matches('#Casher')) {
+  if (event.target.matches('#CA_main')) {
     pullRecords("Goods").then(function (r) {
       for (let row = 0; row <= (r.length / 3 + r.length % 3); ++row) {
         var nRow = document.createElement("ons-row");
@@ -35,24 +35,13 @@ document.addEventListener('show', function (event) {
   }
 }, false);
 
-var showPopover = function(target) {
-  document
-    .getElementById('popover')
-    .show(target);
-};
-
-var hidePopover = function() {
-  document
-    .getElementById('popover')
-    .hide();
-};
 var showTemplateDialog = function() {
-  var dialog = document.getElementById('my-dialog');
+  var dialog = document.getElementById('CA_dialog');
 
   if (dialog) {
     dialog.show();
   } else {
-    ons.createElement('html/Casher/dialog.html', { append: true })
+    ons.createElement('html/Casher/CA_dialog.html', { append: true })
       .then(function(dialog) {
         dialog.show();
       });
@@ -62,5 +51,17 @@ var showTemplateDialog = function() {
 var hideDialog = function(id) {
   document
     .getElementById(id)
+    .hide();
+};
+
+var showPopover = function(target) {
+  document
+    .getElementById('popover')
+    .show(target);
+};
+
+var hidePopover = function() {
+  document
+    .getElementById('popover')
     .hide();
 };
