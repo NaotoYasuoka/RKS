@@ -121,10 +121,10 @@ var NCMB_PullRecords = function (success, failed, table) {
       break;
     case ("Galley"):
       Galley.fetchAll()
-        .order(GalleyKeys[0])
-        .order(GalleyKeys[1])
-        .order(GalleyKeys[2])
         .then(function (objs) {
+          objs=objs.order(GalleyKeys[0])
+              .order(GalleyKeys[1])
+              .order(GalleyKeys[2]);
           for (var i = 0; i < objs.length; ++i) {
             obj = objs[i]
             arr.push([obj.orderLogId, obj.goodsObjectId, obj.team, obj.state, obj.number, obj.seatNum]);
