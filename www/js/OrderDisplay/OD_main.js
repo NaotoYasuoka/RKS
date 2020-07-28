@@ -127,8 +127,10 @@ function OD_stateUpedate(List, buttonID){
       break;
 
     case "next":
-      /* データベース */
       var status = GalleyList[OD_cellNum][3]+1;
+      if(status == 1){
+        selectQuantityDialog();
+      }
       break;
 
     default:
@@ -146,7 +148,7 @@ function OD_stateUpedate(List, buttonID){
 }
 
 
-var selectQuantityDialog = function(value) {
+var selectQuantityDialog = function() {
       var dialog = document.getElementById('OD_dialog');
 
       if (dialog) {
