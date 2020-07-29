@@ -5,23 +5,16 @@ document.addEventListener('show', function (event) {
     pullRecords("Goods").then(function (r) {
       for (let row = 0; row <= (r.length / 3 + r.length % 3); ++row) {
         var nRow = document.createElement("ons-row");
-        nRow.style = "padding: 2px 2px;"
+        nRow.style = "padding: 2px 2px;";
         nRow.id = "pRow" + row;
         document.getElementById("goodsList").appendChild(nRow);
-
 
         for (let col = 0; row * 3 + col < r.length; ++col) {
           var button = document.createElement("ons-button");
           button.onclick = function () {
             CA_showDialog(this);
-            // var nItem = document.createElement("ons-list-item");
-            // nItem.id = "nItem" + i++;
-            // document.getElementById("pCart").appendChild(nItem);
-            // var n = document.createElement("label");
-            // n.id = this.id;
-            // n.textContent = this.textContent;
-            // document.getElementById(nItem.id).appendChild(n);
           };
+
           button.id = r[row * 3 + col][0];
           button.galley = r[row * 3 + col][1];
           button.textContent = r[row * 3 + col][3];
@@ -51,10 +44,22 @@ function CA_showDialog(goodsObj) {
   }
 };
 
-function CA_hideDialog() {
-  document
-    .getElementById(id)
-    .hide();
+function CA_hideDialog(num) {
+  document.getElementById("CA_dialog").hide();
+  var nItem = document.createElement("ons-list-item");
+  document.getElementById("pCart").appendChild(nItem);
+
+  var left = document.createElement("label");
+  left.id = CA_selectedGoodsObj.id;
+  left.textContent = CA_selectedGoodsObj.textContent;
+  left.value = CA_selectedGoodsObj.value;
+  left.galley = CA_selectedGoodsObj.galley;
+  left.num = num;
+  nItem.appendChild(left);
+
+  var right = document.createElement("label");
+  right.textContent = left.num;
+  nItem.appendChild(right);
 };
 
 // var showPopover = function(target) {
