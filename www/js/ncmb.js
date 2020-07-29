@@ -1,22 +1,22 @@
 // This is a JavaScript file
 
-var apikey = "1d9ecfbf5357f17f28ac75657ad02d36b7d9d4906e2a6f62a7c2022a079cff28";
-var clientkey = "3399c8201142519f65329a7ed6c1bdd396deb1f7b96d23d77c3575facf6490a3";
-var ncmb = new NCMB(apikey, clientkey);
+var DB_apikey = "1d9ecfbf5357f17f28ac75657ad02d36b7d9d4906e2a6f62a7c2022a079cff28";
+var DB_clientkey = "3399c8201142519f65329a7ed6c1bdd396deb1f7b96d23d77c3575facf6490a3";
+var ncmb = new NCMB(DB_apikey, DB_clientkey);
 
-var Goods = ncmb.DataStore("Goods");
-var OrderLog = ncmb.DataStore("OrderLog");
-var Galley = ncmb.DataStore("Galley");
+var DB_Goods = ncmb.DataStore("Goods");
+var DB_OrderLog = ncmb.DataStore("OrderLog");
+var DB_Galley = ncmb.DataStore("Galley");
 
 // 登録時の引数の順番は各テーブル以下の配列の順番に合わせてください
-var GoodsAttributes = ["galleyMode", "inStock", "goodsName", "price", "isNewest"];
-var OrderLogAttributes = ["orderLogId", "goodsObjectId", "number", "price"];
-var GalleyAttributes = ["orderLogId", "goodsObjectId", "team", "state", "number", "seatNum"];
+var DB_GoodsAttributes = ["galleyMode", "inStock", "goodsName", "price", "isNewest"];
+var DB_OrderLogAttributes = ["orderLogId", "goodsObjectId", "number", "price"];
+var DB_GalleyAttributes = ["orderLogId", "goodsObjectId", "team", "state", "number", "seatNum"];
 
 // 各テーブルの主キー
-var GoodsKeys = ["objectId"];
-var OrderLogKeys = ["orderLogId", "goodsObjectId"];
-var GalleyKeys = ["orderLogId", "goodsObjectId", "team"];
+var DB_GoodsKeys = ["objectId"];
+var DB_OrderLogKeys = ["orderLogId", "goodsObjectId"];
+var DB_GalleyKeys = ["orderLogId", "goodsObjectId", "team"];
 
 // 使用例
 // addRecord("Goods", 1, 1, "タピオカ", 150, 1).then(function(r){成功時の処理}).catch(function(e){失敗時の処理});
@@ -27,7 +27,7 @@ function addRecord(table) {
       table, data);
   });
 }
-var NCMB_AddRecord = function (success, failed, table, args) {
+function NCMB_AddRecord(success, failed, table, args) {
   for (var i = 0; i < args.length; ++i)
     if (!args[i] && args[i] != 0) {
       failed("Some arguments are null. index: " + i.toString());
@@ -35,10 +35,10 @@ var NCMB_AddRecord = function (success, failed, table, args) {
     }
   switch (table) {
     case ("Goods"):
-      if (args.length == GoodsAttributes.length) {
-        var goods = new Goods();
-        for (var i = 0; i < GoodsAttributes.length; ++i)
-          goods.set(GoodsAttributes[i], args[i]);
+      if (args.length == DB_GoodsAttributes.length) {
+        var goods = new DB_Goods();
+        for (var i = 0; i < DB_GoodsAttributes.length; ++i)
+          goods.set(DB_GoodsAttributes[i], args[i]);
         goods.save()
           .then(function (obj) {
             success(obj);
@@ -49,10 +49,10 @@ var NCMB_AddRecord = function (success, failed, table, args) {
       }
       break;
     case ("OrderLog"):
-      if (args.length == OrderLogAttributes.length) {
-        var orderLog = new OrderLog();
-        for (var i = 0; i < OrderLogAttributes.length; ++i)
-          orderLog.set(OrderLogAttributes[i], args[i]);
+      if (args.length == DB_OrderLogAttributes.length) {
+        var orderLog = new DB_OrderLog();
+        for (var i = 0; i < DB_OrderLogAttributes.length; ++i)
+          orderLog.set(DB_OrderLogAttributes[i], args[i]);
         orderLog.save()
           .then(function (obj) {
             success(obj);
@@ -63,10 +63,10 @@ var NCMB_AddRecord = function (success, failed, table, args) {
       }
       break;
     case ("Galley"):
-      if (args.length == GalleyAttributes.length) {
-        var galley = new Galley();
-        for (var i = 0; i < GalleyAttributes.length; ++i)
-          galley.set(GalleyAttributes[i], args[i]);
+      if (args.length == DB_GalleyAttributes.length) {
+        var galley = new DB_Galley();
+        for (var i = 0; i < DB_GalleyAttributes.length; ++i)
+          galley.set(DB_GalleyAttributes[i], args[i]);
         galley.save()
           .then(function (obj) {
             success(obj);
@@ -93,7 +93,7 @@ var NCMB_PullRecords = function (success, failed, table) {
   var arr = [];
   switch (table) {
     case ("Goods"):
-      Goods.equalTo("isNewest", 1)
+      DB_Goods.equalTo("isNewest", 1)
         .fetchAll()
         .then(function (objs) {
           for (var i = 0; i < objs.length; ++i) {
@@ -107,7 +107,7 @@ var NCMB_PullRecords = function (success, failed, table) {
         });
       break;
     case ("OrderLog"):
-      OrderLog.fetchAll()
+      DB_OrderLog.fetchAll()
         .then(function (objs) {
           for (var i = 0; i < objs.length; ++i) {
             obj = objs[i]
@@ -120,9 +120,9 @@ var NCMB_PullRecords = function (success, failed, table) {
         });
       break;
     case ("Galley"):
-      Galley.order(GalleyKeys[0])
-        .order(GalleyKeys[1])
-        .order(GalleyKeys[2])
+      DB_Galley.order(DB_GalleyKeys[0])
+        .order(DB_GalleyKeys[1])
+        .order(DB_GalleyKeys[2])
         .fetchAll()
         .then(function (objs) {
           for (var i = 0; i < objs.length; ++i) {
@@ -152,7 +152,7 @@ function editRecord(table) {
 var NCMB_EditRecord = function (success, failed, table, args) {
   switch (table) {
     case ("Goods"):
-      Goods.equalTo(GoodsKeys[0], args[0])
+      DB_Goods.equalTo(DB_GoodsKeys[0], args[0])
         .fetchAll()
         .then(function (objs) {
           obj = objs[0];
@@ -168,8 +168,8 @@ var NCMB_EditRecord = function (success, failed, table, args) {
         });
       break;
     case ("OrderLog"):
-      OrderLog.equalTo(OrderLogKeys[0], args[0])
-        .equalTo(OrderLogKeys[1], args[1])
+      DB_OrderLog.equalTo(DB_OrderLogKeys[0], args[0])
+        .equalTo(DB_OrderLogKeys[1], args[1])
         .fetchAll()
         .then(function (objs) {
           obj = objs[0];
@@ -185,9 +185,9 @@ var NCMB_EditRecord = function (success, failed, table, args) {
         });
       break;
     case ("Galley"):
-      Galley.equalTo(GalleyKeys[0], args[0])
-        .equalTo(GalleyKeys[1], args[1])
-        .equalTo(GalleyKeys[2], args[2])
+      DB_Galley.equalTo(DB_GalleyKeys[0], args[0])
+        .equalTo(DB_GalleyKeys[1], args[1])
+        .equalTo(DB_GalleyKeys[2], args[2])
         .fetchAll()
         .then(function (objs) {
           obj = objs[0];
@@ -220,7 +220,7 @@ var NCMB_DeleteRecord = function (success, failed, table, args) {
   var state = false;
   switch (table) {
     case ("Goods"):
-      Goods.equalTo(GoodsKeys[0], args[0])
+      DB_Goods.equalTo(DB_GoodsKeys[0], args[0])
         .fetchAll()
         .then(function (objs) {
           obj = objs[0];
@@ -237,8 +237,8 @@ var NCMB_DeleteRecord = function (success, failed, table, args) {
         });
       break;
     case ("OrderLog"):
-      OrderLog.equalTo(OrderLogKeys[0], args[0])
-        .equalTo(OrderLogKeys[1], args[1])
+      DB_OrderLog.equalTo(DB_OrderLogKeys[0], args[0])
+        .equalTo(DB_OrderLogKeys[1], args[1])
         .fetchAll()
         .then(function (objs) {
           obj = objs[0];
@@ -255,9 +255,9 @@ var NCMB_DeleteRecord = function (success, failed, table, args) {
         });
       break;
     case ("Galley"):
-      Galley.equalTo(GalleyKeys[0], args[0])
-        .equalTo(GalleyKeys[1], args[1])
-        .equalTo(GalleyKeys[2], args[2])
+      DB_Galley.equalTo(DB_GalleyKeys[0], args[0])
+        .equalTo(DB_GalleyKeys[1], args[1])
+        .equalTo(DB_GalleyKeys[2], args[2])
         .fetchAll()
         .then(function (objs) {
           obj = objs[0];
@@ -277,4 +277,26 @@ var NCMB_DeleteRecord = function (success, failed, table, args) {
       failed("Could not found table: " + table);
       break;
   }
+}
+
+// 使用例
+// translateIdsToNames([商品番号, ...]).then(function(r){成功時の処理}).catch(function(e){失敗時の処理});
+function translateIdsToNames(ids) {
+  return new Promise(function (resolve, reject) {
+    NCMB_TranslateIdsToNames(function (r) { resolve(r); }, function (e) { reject(e); }, ids);
+  });
+}
+function NCMB_TranslateIdsToNames(success, failed, ids) {
+  var names = [];
+  pullRecords("Goods").then(function (r) {
+    GoodsList = r;
+    var nameList = [];
+    var idList = [];
+    GoodsList.forEach(value => { idList.push(value[0]); nameList.push(value[3]); })
+    ids.forEach(value => names.push(nameList[idList.indexOf(value)]));
+    success(names);
+  })
+    .catch(function (e) {
+      failed(e);
+    });
 }
