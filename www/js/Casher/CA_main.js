@@ -1,6 +1,5 @@
 // This is a JavaScript file
-
-var i = 0;
+CA_selectedGoodsObj="";
 document.addEventListener('show', function (event) {
   if (event.target.matches('#CA_main')) {
     pullRecords("Goods").then(function (r) {
@@ -14,7 +13,7 @@ document.addEventListener('show', function (event) {
         for (let col = 0; row * 3 + col < r.length; ++col) {
           var button = document.createElement("ons-button");
           button.onclick = function () {
-            showTemplateDialog();
+            CA_showDialog(this);
             // var nItem = document.createElement("ons-list-item");
             // nItem.id = "nItem" + i++;
             // document.getElementById("pCart").appendChild(nItem);
@@ -23,8 +22,10 @@ document.addEventListener('show', function (event) {
             // n.textContent = this.textContent;
             // document.getElementById(nItem.id).appendChild(n);
           };
-          button.textContent = r[row*3+col][3];
-          button.id = r[row*3+col][0];
+          button.id = r[row * 3 + col][0];
+          button.galley = r[row * 3 + col][1];
+          button.textContent = r[row * 3 + col][3];
+          button.value = r[row * 3 + col][4]; 
           document.getElementById(nRow.id).appendChild(button);
         }
       }
@@ -35,33 +36,35 @@ document.addEventListener('show', function (event) {
   }
 }, false);
 
-var showTemplateDialog = function() {
+function CA_showDialog(goodsObj) {
+  CA_selectedGoodsObj = goodsObj;
+  
   var dialog = document.getElementById('CA_dialog');
 
   if (dialog) {
     dialog.show();
   } else {
     ons.createElement('html/Casher/CA_dialog.html', { append: true })
-      .then(function(dialog) {
+      .then(function (dialog) {
         dialog.show();
       });
   }
 };
 
-var hideDialog = function(id) {
+function CA_hideDialog() {
   document
     .getElementById(id)
     .hide();
 };
 
-var showPopover = function(target) {
-  document
-    .getElementById('popover')
-    .show(target);
-};
+// var showPopover = function(target) {
+//   document
+//     .getElementById('popover')
+//     .show(target);
+// };
 
-var hidePopover = function() {
-  document
-    .getElementById('popover')
-    .hide();
-};
+// var hidePopover = function() {
+//   document
+//     .getElementById('popover')
+//     .hide();
+// };
