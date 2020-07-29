@@ -12,8 +12,7 @@
 	<script src="index.js"></script>
 	<script src="js/ncmb.js"></script>
 	<script src="js/Home/Home.js"></script>
-	<script src="js/Casher/CA_main.js"></script>
-	<script src="js/Casher/CA_dialog.js"></script>
+	<script src="js/Casher/Casher.js"></script>
 
 	<!-- 追記部分 -->
 	<script src="js/ProductManagement/PM_main.js"></script>
@@ -37,17 +36,37 @@
 			<ons-page>
 				<ons-list>
 					<ons-list-item onclick="fn.load('html/Home/Home.html')" tappable>
-						Home
+            <div class="left">
+              <img class="list-item__thumbnail" src="image/Home.png">
+            </div>
+            <div class="center">
+              Home
+            </div>
 					</ons-list-item>
-					<ons-list-item onclick="fn.load('html/Casher/CA_main.html')" tappable>
-						Casher
+					<ons-list-item onclick="fn.load('html/Casher/Casher.html')" tappable>
+            <div class="left">
+              <img class="list-item__thumbnail" src="image/Casher.png">
+            </div>
+            <div class="center">
+              Casher
+            </div>
 					</ons-list-item>
 					<ons-list-item onclick="fn.load('html/ProductManagement/PM_main.html')" tappable>
-						商品管理画面
+            <div class="left">
+              <img class="list-item__thumbnail" src="image/ProductManagement.png">
+            </div>
+            <div class="center">
+              商品管理画面
+            </div>
 					</ons-list-item>
 
 					<ons-list-item onclick="fn.load('html/OrderDisplay/OD_main.html')" tappable>
-						注文表示
+            <div class="left">
+              <img class="list-item__thumbnail" src="image/Galley.png">
+            </div>
+            <div class="center">
+              注文表示
+            </div>
 					</ons-list-item>
 				</ons-list>
 			</ons-page>
