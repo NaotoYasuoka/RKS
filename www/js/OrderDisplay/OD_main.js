@@ -136,14 +136,20 @@ function OD_stateUpedate(List, buttonID){
     default:
      break;
   }
-
-  editRecord("Galley", GalleyList[OD_cellNum][0], GalleyList[OD_cellNum][1], GalleyList[OD_cellNum][2], "state", status).then(function(r){
-    OD_loadTable();
-
-  }).catch(function (e){
-    alert(e);
-
-  });
+  if(status == 3){
+    deleteRecord("Galley", GalleyList[OD_cellNum][0], GalleyList[OD_cellNum][1], GalleyList[OD_cellNum][2]).then(function(r){
+      OD_loadTable();
+    }).catch(function(e){
+      alert(e);
+      });
+  
+  }else if(status != 1){
+    editRecord("Galley", GalleyList[OD_cellNum][0], GalleyList[OD_cellNum][1], GalleyList[OD_cellNum][2], "state", status).then(function(r){
+      OD_loadTable();
+    }).catch(function (e){
+      alert(e);
+    });
+  }
 
 }
 
@@ -152,14 +158,14 @@ var selectQuantityDialog = function() {
       var dialog = document.getElementById('OD_dialog');
 
       if (dialog) {
-
         dialog.show();
+        OD_initValue(GalleyList[OD_cellNum][4]);
       } else {
 
        ons.createElement('html/OrderDisplay/OD_dialog.html', { append: true })
       .then(function(dialog) {
-
         dialog.show();
+        OD_initValue(GalleyList[OD_cellNum][4]);
 
       });
     }
