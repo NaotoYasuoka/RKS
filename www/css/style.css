@@ -54,3 +54,36 @@ th, td{
 .coler_back_brack{
   background: #dadada;
 }
+
+
+#H_button {
+  letter-spacing:-4px; /* やや重要 */
+  width:100%;
+  height:100%;
+  padding:20pt;
+  text-align:center; /* 重要 */
+}
+.H_button_1 {
+  width:40%;
+  height:50%; /* 画像などの場合はauto */
+  background-color:red;
+  display:inline-block; /* 重要 */
+  letter-spacing:normal; /* やや重要 */
+}
+.H_button_1:nth-child(even) {
+  background-color:blue;
+  margin-left:6%;
+}
+
+/* #Home{
+  background: #f7f7f7 url(/image/coffee.jpg) center top no-repeat;
+} */
+
+
+.hero {
+  height: 100vh; /* 全画面表示 */
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  background-image: url("image/coffee.jpg");
+}
