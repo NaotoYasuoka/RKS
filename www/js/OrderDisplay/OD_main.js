@@ -33,63 +33,73 @@ function OD_loadTable(){
 function OD_makeTable(List){
   var old_value="";
   var tableEle = document.getElementById('OD_table');
-  for (var i=0; i < List.length; i++) {
+  var goodsObIDList=new Array(GalleyList.length);
+  for(i=0;i < GalleyList.length; i++){
+    goodsObIDList[i] = GalleyList[i][1];
+  }
+  translateIdsToNames(goodsObIDList).then(function(r){
+    const goodsNameList = r;
+    for (var i=0; i < List.length; i++) {
 
-    var tr = document.createElement('tr');
+      var tr = document.createElement('tr');
 
-    if( old_value != List[i][0]){
-      var cou = 1;
-      old_value = List[i][0];
-      var value = List[i][0];
-      var c=i+1;
-      while(c < List.length && value == List[c][0]){
-        c++;
-        cou++;
+      if( old_value != List[i][0]){
+        var cou = 1;
+        old_value = List[i][0];
+        var value = List[i][0];
+        var c=i+1;
+        while(c < List.length && value == List[c][0]){
+          c++;
+          cou++;
+        }
+        // 座席番号の表示
+        var td = document.createElement('td');
+        td.style.textAlign = "center";
+        td.rowSpan = cou;
+        td.innerHTML = List[i][5];
+        tr.appendChild(td);
       }
-      // 座席番号の表示
+
+      // 商品名の表示
+      var td = document.createElement('td');
+      td.innerHTML = goodsNameList[i];
+      tr.appendChild(td);
+
+      // 個数の表示
       var td = document.createElement('td');
       td.style.textAlign = "center";
-      td.rowSpan = cou;
-      td.innerHTML = List[i][5];
+      td.innerHTML = List[i][4];
       tr.appendChild(td);
+
+      // ボタンの作成
+      var td = document.createElement('td');
+      td.className = "OD_table4";
+      td.style.textAlign = "center";
+      if(List[i][3] == 0){
+        td.innerHTML = "<ons-button style='width:100%;height:100%;' id="+ 'back_' +i+ " disabled='true' onclick='getId(GalleyList, this.id);'>←</ons-button>";
+      }else{
+        td.innerHTML = "<ons-button style='width:100%;height:100%;' id="+'back_' +i+ "  onclick='OD_stateUpedate(GalleyList, this.id);'>←</ons-button>";
+      }
+      tr.appendChild(td);
+
+      // 状態の表示
+      var td = document.createElement('td');
+      td.className = "OD_table5";
+      td.style.textAlign = "center";
+      td.innerHTML = OD_makeCell(List[i][3]);
+      tr.appendChild(td);
+      // ボタンの作成
+      var td = document.createElement('td');
+      td.style.textAlign = "center";
+      td.innerHTML = "<ons-button style='width:100%;height:100%;' id="+'next_'+i+" onclick='OD_stateUpedate(GalleyList, this.id);'>→</ons-button>";
+      tr.appendChild(td);
+
+      tableEle.appendChild(tr);
     }
 
-    // 商品名の表示
-    var td = document.createElement('td');
-    td.innerHTML = List[i][1];
-    tr.appendChild(td);
-
-    // 個数の表示
-    var td = document.createElement('td');
-    td.style.textAlign = "center";
-    td.innerHTML = List[i][4];
-    tr.appendChild(td);
-
-    // ボタンの作成
-    var td = document.createElement('td');
-    td.className = "OD_table4";
-    td.style.textAlign = "center";
-    if(List[i][3] == 0){
-      td.innerHTML = "<ons-button style='width:100%;height:100%;' id="+ 'back_' +i+ " disabled='true' onclick='getId(GalleyList, this.id);'>←</ons-button>";
-    }else{
-      td.innerHTML = "<ons-button style='width:100%;height:100%;' id="+'back_' +i+ "  onclick='OD_stateUpedate(GalleyList, this.id);'>←</ons-button>";
-    }
-    tr.appendChild(td);
-
-    // 状態の表示
-    var td = document.createElement('td');
-    td.className = "OD_table5";
-    td.style.textAlign = "center";
-    td.innerHTML = OD_makeCell(List[i][3]);
-    tr.appendChild(td);
-    // ボタンの作成
-    var td = document.createElement('td');
-    td.style.textAlign = "center";
-    td.innerHTML = "<ons-button style='width:100%;height:100%;' id="+'next_'+i+" onclick='OD_stateUpedate(GalleyList, this.id);'>→</ons-button>";
-    tr.appendChild(td);
-
-    tableEle.appendChild(tr);
-  }
+  }).catch(function(e){
+    alert(e);
+  });
 }
 
 
