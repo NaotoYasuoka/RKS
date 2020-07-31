@@ -288,14 +288,15 @@ function translateIdsToNames(ids) {
 }
 function NCMB_TranslateIdsToNames(success, failed, ids) {
   var names = [];
-  pullRecords("Goods").then(function (r) {
-    GoodsList = r;
-    var nameList = [];
-    var idList = [];
-    GoodsList.forEach(value => { idList.push(value[0]); nameList.push(value[3]); })
-    ids.forEach(value => names.push(nameList[idList.indexOf(value)]));
-    success(names);
-  })
+  pullRecords("Goods")
+    .then(function (r) {
+      GoodsList = r;
+      var nameList = [];
+      var idList = [];
+      GoodsList.forEach(function (value) { idList.push(value[0]); nameList.push(value[3]); })
+      ids.forEach(function (value) { names.push(nameList[idList.indexOf(value)]) });
+      success(names);
+    })
     .catch(function (e) {
       failed(e);
     });
