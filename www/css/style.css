@@ -59,20 +59,23 @@ th, td{
 #H_button {
   letter-spacing:-4px; /* やや重要 */
   width:100%;
-  height:100%;
   padding:20pt;
   text-align:center; /* 重要 */
 }
+
 .H_button_1 {
-  width:40%;
-  height:50%; /* 画像などの場合はauto */
-  background-color:red;
+  width:90%;
+  background: red;
+  height:20%; /* 画像などの場合はauto */
   display:inline-block; /* 重要 */
   letter-spacing:normal; /* やや重要 */
 }
-.H_button_1:nth-child(even) {
-  background-color:blue;
-  margin-left:6%;
+
+.H_button_2 {
+  width:90%;
+  height:20%; /* 画像などの場合はauto */
+  display:inline-block; /* 重要 */
+  letter-spacing:normal; /* やや重要 */
 }
 
 /* #Home{
@@ -80,10 +83,58 @@ th, td{
 } */
 
 
-.hero {
-  height: 100vh; /* 全画面表示 */
+/* .hero {
+  height: 100vh; 
+  background-attachment: fixed;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
-  background-image: url("image/coffee.jpg");
+  position: relative;
+  background-image: url("/image/coffee1.jpg");
+}
+
+.hero::before {
+  background: inherit;
+  content: '';
+  filter: blur(15px);
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  bottom: -5px;
+  left: -5px;
+} */
+
+
+.background{
+  z-index:0;
+  overflow: hidden;
+  background-color: white;/*半透明カラーの色*/
+}
+
+.background::before{
+  content: '';
+  background: url("/image/coffee1.jpg");/*背景画像のURL*/
+  opacity: 0.5;/*半透明カラーの透明度*/
+  filter: blur(8px);/*ぼかし度*/
+  position: absolute;
+  height: 100%; 
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  width:100%;
+    /* 参考: http://designcolor-web.com/2016/09/14/css-blur-effects-background/*/
+  top: -8px;
+  left: -8px;
+  right: -8px;
+  bottom: -8px;
+  z-index: -1;
+}
+
+.title{
+  width: 100%;
+}
+
+.H_buttons{
+  text-align: center;
 }
