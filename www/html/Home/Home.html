@@ -1,4 +1,3 @@
-<!DOCTYPE HTML>
 <ons-page id="Home" class="hero" style="height: 100%;">
   <ons-toolbar>
     <div class="left">
@@ -9,11 +8,20 @@
     <div class="center">
       Home
     </div>
+
+    
   </ons-toolbar>
   <div class="background"></div>
   <img src="/image/RKS.png" class="title">
   <ons-row">
-    <div class="H_buttons">
+    <button img="/image/CasherButton.png"></button>
+    <!-- <img src="/image/CasherButton.png" class="button"> -->
+    <div class="container">
+      <input type="image" class="image" src="image/CasherButton.png" onclick="fn.load('html/Casher/CA_main.html')">
+      <span style="margin-right: 2em;"></span>
+      <input type="image" class="image" src="image/GalleyButton.png" onclick="fn.load('html/OrderDisplay/OD_main.html')">
+    </div>
+    <!-- <div class="H_buttons">
       <ons-button modifier="large" class="H_button_1" class="coler_back_red" onclick="fn.load('html/Casher/CA_main.html')">
         <strong>
           会計モード
@@ -25,7 +33,7 @@
         <strong>
           厨房モード
         </strong>
-      </ons-button>
+      </ons-button> -->
     </div>
 
     <!-- <ons-button onclick="fn.load('html/Casher/CA_main.html')">Casher</ons-button>
