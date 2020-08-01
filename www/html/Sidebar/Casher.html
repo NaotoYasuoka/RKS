@@ -1,38 +1,4 @@
-<!DOCTYPE HTML>
-<html style="height: 100%;">
-
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-	<meta http-equiv="Content-Security-Policy" content="default-src * data: gap: https://ssl.gstatic.com; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
-	<script src="components/loader.js"></script>
-	<script src="lib/onsenui/js/onsenui.min.js"></script>
-
-	<!-- 各ページのjs読み込み -->
-	<script src="index.js"></script>
-	<script src="js/ncmb.js"></script>
-	<script src="js/Home/Home.js"></script>
-	<script src="js/Casher/CA_main.js"></script>
-	<script src="js/Casher/CA_dialog.js"></script>
-
-	<!-- 追記部分 -->
-	<script src="js/ProductManagement/PM_main.js"></script>
-	<script src="js/ProductManagement/PM_dialog.js"></script>
-	<script src="js/OrderDisplay/OD_main.js"></script>
-  <script src="js/OrderDisplay/OD_dialog.js"></script>
-
-	<link rel="stylesheet" href="css/ProductManagement.css">
-	<link rel="stylesheet" href="css/OrderDisplay.css">
-
-	<link rel="stylesheet" href="components/loader.css">
-	<link rel="stylesheet" href="lib/onsenui/css/onsenui.css">
-	<link rel="stylesheet" href="lib/onsenui/css/onsen-css-components.css">
-	<link rel="stylesheet" href="css/style.css">
-</head>
-
-<body style="height: 100%;">
-	<!DOCTYPE HTML>
-	<ons-splitter>
+<ons-splitter>
 		<ons-splitter-side id="menu" side="left" width="220px" collapse swipeable>
 			<ons-page>
 				<ons-list>
@@ -69,7 +35,7 @@
               <img class="list-item__thumbnail" src="image/Casher.png">
             </div>
             <div class="center">
-              会計
+              Casher
             </div>
 					</ons-list-item>
 					<ons-list-item onclick="fn.load('html/ProductManagement/PM_main.html')" modifier="chevron" tappable>
@@ -77,7 +43,7 @@
               <img class="list-item__thumbnail" src="image/ProductManagement.png">
             </div>
             <div class="center">
-              商品管理
+              商品管理画面
             </div>
 					</ons-list-item>
 
@@ -96,25 +62,4 @@
 		<ons-splitter-content id="content" page="html/Home/Home.html">
 			<!-- この中にons-pageで画面を作るかpageにidをいれる -->
 		</ons-splitter-content>
-
-		<!-- <ons-splitter-side id="menu2" side="left" width="220px" collapse swipeable>
-			<ons-page>
-				<ons-list>
-					<ons-list-item onclick="fn.load('html/OrderDisplay/OD_main.html')" modifier="chevron" tappable>
-            <div class="left">
-              <img class="list-item__thumbnail" src="image/Galley.png">
-            </div>
-            <div class="center">
-              注文表示
-            </div>
-					</ons-list-item>
-				</ons-list>
-        <ons-button>会計モード</ons-button>
-			</ons-page>
-		</ons-splitter-side>
-		<ons-splitter-content id="content" page="html/Home/Home.html">
-		</ons-splitter-content> -->
 	</ons-splitter>
-</body>
-
-</html>
