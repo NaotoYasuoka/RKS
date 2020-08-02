@@ -1,0 +1,28 @@
+<!-- html/OrderLog/OL_main.html -->
+<ons-page id="OL_main"  width="100%" height="100">
+
+  <ons-toolbar>
+    <div class="left">
+      <ons-toolbar-button onclick="fn.open()">
+        <ons-icon icon="ion-ios-menu, material:md-menu"></ons-icon>
+       </ons-toolbar-button>
+    </div>
+    <div class="center">注文履歴</div>
+    <div class="right">
+      <ons-toolbar-button onclick="fn.open()">
+        <ons-icon icon="ion-ios-menu, material:md-menu"></ons-icon>
+       </ons-toolbar-button>
+    </div>
+  </ons-toolbar>
+
+  <!-- 商品管理テーブルの作成 --> 
+  <table width="100%" id="OL_table">
+    <tr>
+      <th bgcolor="#dcdcdc" class="OL_table1">会計日時</th>
+      <th bgcolor="#dcdcdc" class="OL_table2">商品名</th> 
+      <th bgcolor="#dcdcdc" class="OL_table3">個数</th> 
+      <th bgcolor="#dcdcdc" class="OL_table4">金額</th> 
+    </tr>
+  </table>
+
+</ons-page>

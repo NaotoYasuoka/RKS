@@ -3,11 +3,8 @@
 var OD_cellNum;
 
 document.addEventListener('show', function(event) {
-
   if (event.target.matches('#OD_main')) { 
-
     OD_loadTable();
-
   }
 }, false);
 
@@ -17,15 +14,12 @@ function OD_loadTable(){
   // alert("Hello!!");
   pullRecords("Galley")
   .then(function(list){
-    
     GalleyList=list;
     deleteTable("OD_table");
     OD_makeTable(GalleyList);
-
   }).catch(function (e){
     alert(e);
   });
-
 }
 
 
@@ -40,9 +34,7 @@ function OD_makeTable(List){
   translateIdsToNames(goodsObIDList).then(function(r){
     const goodsNameList = r;
     for (var i=0; i < List.length; i++) {
-
       var tr = document.createElement('tr');
-
       if( old_value != List[i][0]){
         var cou = 1;
         old_value = List[i][0];
@@ -81,7 +73,6 @@ function OD_makeTable(List){
         td.innerHTML = "<ons-button style='width:100%;height:100%;' id="+'back_' +i+ "  onclick='OD_stateUpedate(GalleyList, this.id);'>←</ons-button>";
       }
       tr.appendChild(td);
-
       // 状態の表示
       var td = document.createElement('td');
       td.className = "OD_table5";
@@ -93,10 +84,8 @@ function OD_makeTable(List){
       td.style.textAlign = "center";
       td.innerHTML = "<ons-button style='width:100%;height:100%;' id="+'next_'+i+" onclick='OD_stateUpedate(GalleyList, this.id);'>→</ons-button>";
       tr.appendChild(td);
-
       tableEle.appendChild(tr);
     }
-
   }).catch(function(e){
     alert(e);
   });
@@ -104,9 +93,7 @@ function OD_makeTable(List){
 
 
 function OD_makeCell(value){
-
   var return_value;
-
   switch(value){
     case 0:
       return_value = "準備待ち";
@@ -127,7 +114,6 @@ function OD_makeCell(value){
 
 
 function OD_stateUpedate(List, buttonID){
-
   alert(buttonID);
   const splitID = buttonID.split('_');
   OD_cellNum = splitID[1];
@@ -135,14 +121,12 @@ function OD_stateUpedate(List, buttonID){
     case "back":
       var status = GalleyList[OD_cellNum][3]-1;
       break;
-
     case "next":
       var status = GalleyList[OD_cellNum][3]+1;
       if(status == 1){
         selectQuantityDialog();
       }
       break;
-
     default:
      break;
   }
@@ -171,12 +155,10 @@ var selectQuantityDialog = function() {
         dialog.show();
         OD_initValue(GalleyList[OD_cellNum][4]);
       } else {
-
        ons.createElement('html/OrderDisplay/OD_dialog.html', { append: true })
       .then(function(dialog) {
         dialog.show();
         OD_initValue(GalleyList[OD_cellNum][4]);
-
       });
     }
   };
