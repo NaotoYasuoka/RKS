@@ -1,0 +1,34 @@
+<!-- html/Casher/CA_dialog.html -->
+<ons-alert-dialog id="CA_dialog" cancelable>
+
+	<div class="alert-dialog-title">座席選択画面</div>
+  
+	<ons-list>
+	  <ons-list-header>席の選択</ons-list-header>
+	  <ons-list-item modifier="nodivider">
+		<div class="center">
+		  <ons-button id="CA_button_1" onclick="CA_selectNum(this.id)">　　 1 　　</ons-button>
+		</div>
+		<div class="right">
+		  <ons-button id="CA_button_2" onclick="CA_selectNum(this.id)">　　 2 　　</ons-button>
+		</div>
+	  </ons-list-item>
+	  <ons-list-item modifier="nodivider">
+		<div class="center">
+		  <ons-button id="CA_button_3" onclick="CA_selectNum(this.id)">　　 3 　　</ons-button>
+		</div>
+		<div class="right">
+		  <ons-button id="CA_button_4" onclick="CA_selectNum(this.id)">　　 4 　　</ons-button>
+		</div>
+	  </ons-list-item>
+	  <ons-list-item>
+		<div class="center">
+		  <ons-button id="CA_button_5" onclick="CA_selectNum(this.id)">　　 5 　　</ons-button>
+		</div>
+		<div class="right">
+		  <ons-button id="CA_button_6" onclick="CA_selectNum(this.id)">　　 6 　　</ons-button>
+		</div>
+		<ons-button id="CA_takeout" onclick="CA_selectNum(this.id)" class="center">持ち帰り</ons-button>
+	  </ons-list-item>
+	</ons-list>
+  </ons-alert-dialog>

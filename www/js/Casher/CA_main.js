@@ -37,11 +37,12 @@ function CA_loadGoods(r) {
       var button = document.createElement("ons-button");
       button.id = r[row * 3 + col][0];
       button.galley = r[row * 3 + col][1];
+      button.inStock = r[row * 3 + col][2];
       button.textContent = r[row * 3 + col][3];
       button.value = r[row * 3 + col][4];
       button.onclick = function () {
         CA_showDialog(this);
-      };
+      }
 
       document.getElementById(nRow.id).appendChild(button);
     }
@@ -69,15 +70,18 @@ function CA_hideDialog(goodsNum) {
 }
 
 function CA_addCart(goodsNum) {
-  var i;
-  for(i=0; i<CA_cartList.length; i++);
-  if (i != CA_cartList.length) {
-    alert(tmp);
-    CA_cartList[tmp][4] += goodsNum;
+  var arr = [];
+  CA_cartList.forEach(function (value) {
+    arr.push(value[0]);
+  });
+  var i = arr.indexOf(CA_selectedGoodsObj.id)
+  if (i != -1) {
+    CA_cartList[i][4] += goodsNum;
   }
   else {
     CA_cartList.push([CA_selectedGoodsObj.id, CA_selectedGoodsObj.galley, CA_selectedGoodsObj.textContent, CA_selectedGoodsObj.value, goodsNum]);
   }
+
   CA_reloadCart();
   CA_calcTotalPrice();
 }
@@ -87,7 +91,7 @@ function CA_reloadCart() {
     CA_cartObj.removeChild(CA_cartObj.firstChild);
   }
 
-  CA_cartList.forEach(function (value) {
+  CA_cartList.forEach(function (value, index) {
     var nItem = document.createElement("ons-list-item");
     CA_cartObj.appendChild(nItem);
 
@@ -98,11 +102,22 @@ function CA_reloadCart() {
     left.value = value[3];
     left.num = value[4];
 
-    var right = document.createElement("label");
-    right.textContent = left.num;
+    var right = document.createElement("input");
+    right.type = "number";
+    right.style = "width: 30px;";
+    right.value = left.num;
+
+    var del = document.createElement("input");
+    del.type = "button";
+    del.value = "削除";
+    del.index = index;
+    del.onclick = function () {
+      CA_removeCartList(this.index);
+    }
 
     nItem.appendChild(left);
     nItem.appendChild(right);
+    nItem.appendChild(del);
   });
 }
 
@@ -112,4 +127,37 @@ function CA_calcTotalPrice() {
     sum += value[3] * value[4];
   });
   CA_totalPrice.value = sum;
+}
+
+function CA_pushDB() {
+  var Id = 1;
+  pullRecords("OrderLog")
+    .then(function (r) {
+      if (r.length) {
+        Id = r.slice(-1)[0][0] + 1;
+      }
+      alert("id is " + Id);
+
+      // カートの中身をすべてDBに登録する
+      while (CA_cartList.length) {
+        var value = CA_cartList.shift();
+        if (value[1]) {
+          addRecord("Galley", Id, value[0], 1, 0, value[4], 1024)
+            .catch(e => alert(e));
+        }
+        addRecord("OrderLog", Id, value[0], value[4], value[3])
+          .catch(e => alert(e));
+      }
+
+      CA_reloadCart();
+      CA_calcTotalPrice();
+    })
+    .catch(e => alert(e));
+}
+
+function CA_removeCartList(i) {
+  CA_cartList.splice(i, 1);
+
+  CA_reloadCart();
+  CA_calcTotalPrice();
 }
