@@ -111,7 +111,7 @@ var NCMB_PullRecords = function (success, failed, table) {
         .then(function (objs) {
           for (var i = 0; i < objs.length; ++i) {
             obj = objs[i]
-            arr.push([obj.orderLogId, obj.goodsObjectId, obj.number, obj.price]);
+            arr.push([obj.orderLogId, obj.goodsObjectId, obj.createDate, obj.number, obj.price]);
           }
           success(arr);
         })
