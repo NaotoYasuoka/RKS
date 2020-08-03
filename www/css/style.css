@@ -14,23 +14,10 @@
   opacity:1; 
 } */
 
-/* .pList{
-  height: 100%;
-  overflow-y:scroll;
+.money {
+  font-size: 200%;
+  text-align: right;
 }
-
-html {
-    height: 100%;
-}
-body {
-    height: 100%;
-    margin: 0;
-}
-ons-page {
-    height: 100%;
-    margin: 0;
-} */
-
 
 table{
   border-collapse: collapse;

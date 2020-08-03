@@ -1,11 +1,16 @@
 // This is a JavaScript file
+document.addEventListener('preshow', function (event) {
+  if (event.target.matches('#CA_dialog')) {
+    document.getElementById("CA_textbox").value = null;
+  }
+}, false);
 function CA_selectNum(id) {
   switch (id.split("_")[1]) {
     case ("button"):
-      CA_hideDialog(Number(id.split("_")[2]));
+      CA_onSelectedNum(Number(id.split("_")[2]));
       break;
     case ("textbox"):
-      CA_hideDialog(Number(document.getElementById(id).value));
+    if(document.getElementById(id).value) CA_onSelectedNum(Number(document.getElementById(id).value));
       break;
     default:
       alert("error in www/html/Casher/CA_dialog.js");

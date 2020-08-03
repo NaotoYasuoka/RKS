@@ -21,14 +21,9 @@
 			<!-- カート -->
 			<ons-list id="CA_cart"></ons-list>
 		</ons-col>
-	<ons-row style="bottom:0px; right:0px; position:fixed; width:30%;">
-		<input type="number" id="CA_totalPrice" readonly style="width: 50%;">
-		<input type="button" value="決定" onclick="CA_pushDB()">
+		<ons-col style="bottom:0px; right:0px; position:fixed; width:30%;">
+				<input type="number" id="CA_totalPrice" readonly style="width: 100%;" class="money">
+				<ons-button onclick="CA_showSelectSeat()" style="width: 100%;" class="coler_back_red">決定</ons-button>
+		</ons-col>
 	</ons-row>
-	</ons-row>
-	<!-- 小計・決定ボタン -->
-	<!-- <ons-row style="bottom:0px; right:0px; position:fixed; width:30%;">
-		<input type="number" id="CA_totalPrice" readonly style="width: 80%;">
-		<input type="button" value="決定" onclick="CA_pushDB()" style="width: 20%;">
-	</ons-row> -->
 </ons-page>
