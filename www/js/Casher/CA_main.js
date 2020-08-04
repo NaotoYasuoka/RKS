@@ -35,13 +35,19 @@ function CA_loadGoods(r) {
 
     for (let col = 0; row * 3 + col < r.length; ++col) {
       var button = document.createElement("ons-button");
-      button.id = r[row * 3 + col][0];
-      button.galley = r[row * 3 + col][1];
-      button.inStock = r[row * 3 + col][2];
-      button.textContent = r[row * 3 + col][3];
-      button.value = r[row * 3 + col][4];
+      if (r[row * 3 + col][2] != 0) {
+        button.id = r[row * 3 + col][0];
+        button.galley = r[row * 3 + col][1];
+        button.inStock = r[row * 3 + col][2];
+        button.textContent = r[row * 3 + col][3];
+        button.value = r[row * 3 + col][4];
+      }
+      else {
+        button.disabled = true;
+        button.textContent = r[row * 3 + col][3];
+      }
       button.onclick = function () {
-        CA_showDialog(this);
+        CA_showSelectNum(this);
       }
 
       document.getElementById(nRow.id).appendChild(button);
@@ -49,7 +55,7 @@ function CA_loadGoods(r) {
   }
 }
 
-function CA_showDialog(goodsObj) {
+function CA_showSelectNum(goodsObj) {
   CA_selectedGoodsObj = goodsObj;
 
   var dialog = document.getElementById('CA_dialog');
@@ -64,7 +70,7 @@ function CA_showDialog(goodsObj) {
   }
 }
 
-function CA_hideDialog(goodsNum) {
+function CA_onSelectedNum(goodsNum) {
   document.getElementById("CA_dialog").hide();
   CA_addCart(goodsNum);
 }
@@ -87,9 +93,8 @@ function CA_addCart(goodsNum) {
 }
 
 function CA_reloadCart() {
-  while (CA_cartObj.firstChild) {
-    CA_cartObj.removeChild(CA_cartObj.firstChild);
-  }
+  // htmlのカート内の要素を全削除
+  while (CA_cartObj.firstChild) CA_cartObj.removeChild(CA_cartObj.firstChild);
 
   CA_cartList.forEach(function (value, index) {
     var nItem = document.createElement("ons-list-item");
@@ -105,15 +110,18 @@ function CA_reloadCart() {
     var right = document.createElement("input");
     right.type = "number";
     right.style = "width: 30px;";
+    right.oninput = function () {
+      if (this.value > 0) CA_cartList[index][4] = this.value;
+      else this.value = 1;
+      CA_calcTotalPrice();
+    }
     right.value = left.num;
 
     var del = document.createElement("input");
     del.type = "button";
     del.value = "削除";
     del.index = index;
-    del.onclick = function () {
-      CA_removeCartList(this.index);
-    }
+    del.onclick = () => CA_removeCartList(this.index);
 
     nItem.appendChild(left);
     nItem.appendChild(right);
@@ -123,36 +131,57 @@ function CA_reloadCart() {
 
 function CA_calcTotalPrice() {
   var sum = 0;
-  CA_cartList.forEach(function (value) {
-    sum += value[3] * value[4];
-  });
+  CA_cartList.forEach(value => sum += value[3] * value[4]);
   CA_totalPrice.value = sum;
 }
 
-function CA_pushDB() {
+function CA_showSelectSeat() {
+  if(!CA_cartList.length) return;
+  var dialog = document.getElementById('CA_dialog2');
+  if (dialog) {
+    dialog.show();
+  } else {
+    ons.createElement('html/Casher/CA_dialog2.html', { append: true })
+      .then(function (dialog) {
+        dialog.show();
+      });
+  }
+}
+
+function CA_onSelectedSeat(seatNum) {
+  document.getElementById("CA_dialog2").hide();
+  CA_pushDB(seatNum);
+}
+
+function CA_pushDB(seatNum) {
   var Id = 1;
   pullRecords("OrderLog")
     .then(function (r) {
-      if (r.length) {
-        Id = r.slice(-1)[0][0] + 1;
-      }
-      alert("id is " + Id);
-
+      // 前回の注文＋１で注文番号を設定
+      if (r.length) Id = r.slice(-1)[0][0] + 1;
+      // プッシュ成功確認用フラグ
+      var n = CA_cartList.length;
       // カートの中身をすべてDBに登録する
       while (CA_cartList.length) {
         var value = CA_cartList.shift();
-        if (value[1]) {
-          addRecord("Galley", Id, value[0], 1, 0, value[4], 1024)
-            .catch(e => alert(e));
-        }
         addRecord("OrderLog", Id, value[0], value[4], value[3])
-          .catch(e => alert(e));
+          .then(function () {
+            if (value[1]) {
+              addRecord("Galley", Id, value[0], 1, 0, value[4], seatNum)
+                .then(function () {
+                  if (--n == 0) alert("Success pushing to DB.");
+                  CA_reloadCart();
+                  CA_calcTotalPrice();
+                })
+                .catch(e => alert("Failed to push DB.\n" + e));
+            }
+            else if (--n == 0) alert("Success pushing to DB.");
+          })
+          .catch(e => alert("Failed to push DB.\n" + e));
       }
 
-      CA_reloadCart();
-      CA_calcTotalPrice();
     })
-    .catch(e => alert(e));
+    .catch(e => alert("Failed to pull DB to push.\n" + e));
 }
 
 function CA_removeCartList(i) {
