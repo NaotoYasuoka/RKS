@@ -31,9 +31,9 @@
 	  </ons-list-item>
 	  <ons-list-header>キーボードによる入力</ons-list-header>
 	  <ons-list-item>
-		<input type="number" id="CA_textbox" class="text-input" placeholder="席番号">
+		<input type="number" id="CA_textbox2" class="text-input" placeholder="席番号" oninput="CA_keepPositive(this)">
 		<div class="right">
-		  <ons-button class="coler_back_red" onclick="CA_selectSeat(&quot;CA_textbox&quot;)">決定</ons-button>
+		  <ons-button class="coler_back_red" onclick="CA_selectSeat(&quot;CA_textbox2&quot;)">決定</ons-button>
 		</div>
 	  </ons-list-item>
 	  <ons-list-header>お持ち帰り</ons-list-header>

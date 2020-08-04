@@ -31,7 +31,7 @@
 	  </ons-list-item>
 	  <ons-list-header>キーボードによる個数入力</ons-list-header>
 	  <ons-list-item >
-		<input type="number" id="CA_textbox" class="text-input" placeholder="個数">
+		<input type="number" id="CA_textbox" class="text-input" placeholder="個数" oninput="CA_keepPositive(this)">
 		<div class="right">
 		  <ons-button class="coler_back_red" onclick="CA_selectNum(&quot;CA_textbox&quot;)">決定</ons-button>
 		</div>

@@ -9,7 +9,7 @@ function CA_selectSeat(id) {
     case ("button"):
       CA_onSelectedSeat(Number(id.split("_")[2]));
       break;
-    case ("textbox"):
+    case ("textbox2"):
       if(document.getElementById(id).value) CA_onSelectedSeat(Number(document.getElementById(id).value));
       break;
     default:

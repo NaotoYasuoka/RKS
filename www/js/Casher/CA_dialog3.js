@@ -6,11 +6,11 @@ document.addEventListener('preshow', function (event) {
         r.forEach(function (value) {
           var nRow = document.createElement("ons-list-item");
           nRow.tappable = true;
-          nRow.id = r[row * 3 + col][0];
-          nRow.galley = r[row * 3 + col][1];
-          nRow.inStock = r[row * 3 + col][2];
-          nRow.textContent = r[row * 3 + col][3];
-          nRow.value = r[row * 3 + col][4];
+          nRow.id = r.goodsObjectId;
+          nRow.galley = r.galleyMode;
+          nRow.inStock = r.inStock;
+          nRow.textContent = r.goodsName;
+          nRow.value = r.price;
           nRow.onclick = onSelectAltGoods(this);
           document.getElementById("CA_dialogGoodsList").appendChild(nRow);
         })

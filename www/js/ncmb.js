@@ -1,5 +1,31 @@
-// This is a JavaScript file
+/*
+===登録時の引数の順番===
+商品テーブル ["galleyMode", "inStock", "goodsName", "price", "isNewest"];
+注文履歴テーブル ["orderLogId", "goodsObjectId", "orderDate", "number", "price", seatNum];
+厨房テーブル ["orderLogId", "goodsObjectId", "team", "state", "number", "seatNum"];
 
+===取得時の辞書のキー名===
+商品テーブル ["objectId", "galleyMode", "inStock", "goodsName", "price", "isNewest"];
+注文履歴テーブル ["orderLogId", "goodsObjectId", "orderDate", "number", "price", "seatNum"];
+厨房テーブル ["orderLogId", "goodsObjectId", "team", "state", "number", "seatNum"];
+
+===使用例===
+addRecord("Goods", 1, 1, "タピオカ", 150, 1)
+  .then(function(r){成功時の処理})    // r: 成功したレコードの情報
+  .catch(function(e){失敗時の処理});  // e: エラーコード 
+
+pullRecords("OrderLog")
+  .then(function(r){成功時の処理})    // r: レコードの辞書配列
+  .catch(function(e){失敗時の処理});  // e: エラーコード
+  
+editRecord("Goods", "objectId"(商品番号), "isNewest", 0, "inStock", 0)
+  .then(function(r){成功時の処理})    // r: 成功したレコードの情報
+  .catch(function(e){失敗時の処理});  // e: エラーコード
+*/
+
+
+
+// This is a JavaScript file
 var DB_apikey = "1d9ecfbf5357f17f28ac75657ad02d36b7d9d4906e2a6f62a7c2022a079cff28";
 var DB_clientkey = "3399c8201142519f65329a7ed6c1bdd396deb1f7b96d23d77c3575facf6490a3";
 var ncmb = new NCMB(DB_apikey, DB_clientkey);
@@ -9,17 +35,21 @@ var DB_OrderLog = ncmb.DataStore("OrderLog");
 var DB_Galley = ncmb.DataStore("Galley");
 
 // 登録時の引数の順番は各テーブル以下の配列の順番に合わせてください
-var DB_GoodsAttributes = ["galleyMode", "inStock", "goodsName", "price", "isNewest"];
-var DB_OrderLogAttributes = ["orderLogId", "goodsObjectId", "number", "price"];
-var DB_GalleyAttributes = ["orderLogId", "goodsObjectId", "team", "state", "number", "seatNum"];
+const DB_GoodsAttributes = ["galleyMode", "inStock", "goodsName", "price", "isNewest"];
+const DB_OrderLogAttributes = ["orderLogId", "goodsObjectId", "orderDate", "number", "price", "seatNum"];
+const DB_GalleyAttributes = ["orderLogId", "goodsObjectId", "team", "state", "number", "seatNum"];
+
+// 取得時の返り値の辞書設定
+const DB_GoodsElement = ["objectId", "galleyMode", "inStock", "goodsName", "price", "isNewest"];
+const DB_OrderLogElement = ["orderLogId", "goodsObjectId", "orderDate", "number", "price"];
+const DB_GalleyElement = ["orderLogId", "goodsObjectId", "team", "state", "number", "seatNum"];
 
 // 各テーブルの主キー
-var DB_GoodsKeys = ["objectId"];
-var DB_OrderLogKeys = ["orderLogId", "goodsObjectId"];
-var DB_GalleyKeys = ["orderLogId", "goodsObjectId", "team"];
+const DB_GoodsKeys = ["objectId"];
+const DB_OrderLogKeys = ["orderLogId", "goodsObjectId"];
+const DB_GalleyKeys = ["orderLogId", "goodsObjectId", "team"];
 
-// 使用例
-// addRecord("Goods", 1, 1, "タピオカ", 150, 1).then(function(r){成功時の処理}).catch(function(e){失敗時の処理});
+// 追加
 function addRecord(table) {
   var data = Array.from(arguments).slice(1);
   return new Promise(function (resolve, reject) {
@@ -82,8 +112,7 @@ function NCMB_AddRecord(success, failed, table, args) {
   }
 }
 
-// 使用例
-// pullRecords("OrderLog").then(function(r){成功時の処理}).catch(function(e){失敗時の処理});
+// 取得
 function pullRecords(table) {
   return new Promise(function (resolve, reject) {
     NCMB_PullRecords(function (r) { resolve(r); }, function (e) { reject(e); }, table);
@@ -96,10 +125,13 @@ var NCMB_PullRecords = function (success, failed, table) {
       DB_Goods.equalTo("isNewest", 1)
         .fetchAll()
         .then(function (objs) {
-          for (var i = 0; i < objs.length; ++i) {
-            obj = objs[i]
-            arr.push([obj.objectId, obj.galleyMode, obj.inStock, obj.goodsName, obj.price, obj.isNewest]);
-          }
+          objs.forEach(function (obj) {
+            var tmp = {};
+            DB_GoodsElement.forEach(function(value){
+              tmp[value] = obj[value];
+            });
+            arr.push(tmp);
+          });
           success(arr);
         })
         .catch(function (err) {
@@ -109,10 +141,13 @@ var NCMB_PullRecords = function (success, failed, table) {
     case ("OrderLog"):
       DB_OrderLog.fetchAll()
         .then(function (objs) {
-          for (var i = 0; i < objs.length; ++i) {
-            obj = objs[i]
-            arr.push([obj.orderLogId, obj.goodsObjectId, obj.createDate, obj.number, obj.price]);
-          }
+          objs.forEach(function (obj) {
+            var tmp = {};
+            DB_OrderLogElement.forEach(function(value){
+              tmp[value] = obj[value];
+            });
+            arr.push(tmp);
+          });
           success(arr);
         })
         .catch(function (err) {
@@ -125,10 +160,13 @@ var NCMB_PullRecords = function (success, failed, table) {
         .order(DB_GalleyKeys[2])
         .fetchAll()
         .then(function (objs) {
-          for (var i = 0; i < objs.length; ++i) {
-            obj = objs[i]
-            arr.push([obj.orderLogId, obj.goodsObjectId, obj.team, obj.state, obj.number, obj.seatNum]);
-          }
+          objs.forEach(function (obj) {
+            var tmp = {};
+            DB_GalleyElement.forEach(function(value){
+              tmp[value] = obj[value];
+            });
+            arr.push(tmp);
+          });
           success(arr);
         })
         .catch(function (err) {
@@ -141,8 +179,7 @@ var NCMB_PullRecords = function (success, failed, table) {
   }
 }
 
-// 使用例
-// editRecord("Goods", "objectId"(商品番号), "isNewest", 0, "inStock", 0).then(function(r){成功時の処理}).catch(function(e){失敗時の処理});
+// 編集
 function editRecord(table) {
   var data = Array.from(arguments).slice(1);
   return new Promise(function (resolve, reject) {
@@ -208,6 +245,7 @@ var NCMB_EditRecord = function (success, failed, table, args) {
   }
 }
 
+// 削除
 // 使用例
 // deleteRecord("Galley", "orderLogId"(注文番号), "goodsObjectId"(商品番号), "team"(チーム)).then(function(r){成功時の処理}).catch(function(e){失敗時の処理});
 function deleteRecord(table) {
