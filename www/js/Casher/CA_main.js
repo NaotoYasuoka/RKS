@@ -148,7 +148,7 @@ function CA_onSelectedSeat(seatNum) {
 
 function CA_pushDB(seatNum) {
   var now = new Date();
-  const currentDate = now.getFullYear() + "/" + (now.getMonth() + 1) + "/" + now.getDate() + "/" + now.getHours() + "/" + now.getMinutes() + "/" + now.getSeconds();
+  const currentDate = now.getFullYear() + "/" + (now.getMonth() + 1) + "/" + now.getDate() + "_" + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
   var orderId = 1;
   pullRecords("OrderLog")
     .then(function (r) {
