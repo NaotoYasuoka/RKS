@@ -1,7 +1,7 @@
 // This is a JavaScript file
 document.addEventListener('preshow', function (event) {
   if (event.target.matches('#CA_dialog2')) {
-    document.getElementById("CA_textbox").value = null;
+    document.getElementById("CA_textbox2").value = null;
   }
 }, false);
 function CA_selectSeat(id) {

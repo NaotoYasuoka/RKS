@@ -35,22 +35,48 @@ document.addEventListener('show', function (event) {
 function CA_loadGoods(r) {
   var nRow;
   r.forEach(function (obj, index) {
+    switch(index % 3) {
+      case(0):
+        break;
+      case(1):
+        break;
+      case(2):
+        break;
+      default:
+        alert("www/js/Casher/CA_main.js");
+        break;
+    }
     if (index % 3 == 0) {
-      nRow = document.createElement("ons-row");
-      nRow.style = "padding: 2px 2px;";
+      nRow = document.createElement("ons-list-item");
+      nRow.className = "CA_r";
       document.getElementById("CA_goodsList").appendChild(nRow);
     }
-    var button = document.createElement("ons-button");
+    var button = document.createElement("button");
     if (obj.inStock == 1) {
       CA_buttonElement.forEach(value => {
         button[value] = obj[value];
       });
     }
     else button.disabled = true;
-    button.className = "CA_button";
-    button.textContent = obj.goodsName + "\n" + obj.price;
+    button.className = "CA_b";
     button.onclick = function () { CA_showSelectNum(this); };
     nRow.appendChild(button);
+
+    var t = document.createElement("div");
+    t.className = "CA_t";
+    t.textContent = obj.goodsName + "\n" + obj.price;
+    button.appendChild(t);
+
+
+    // var str = "";
+    // if (obj.inStock == 1) CA_buttonElement.forEach(value => str += value + "=\"" + obj[value] + "\"");
+    // else 
+    // nRow.innerHTML += "<ons-button " + str + " onclick=\"CA_showSelectNum(this)\">" + obj.goodsName + "<br>" + obj.price + "</ons-button>";
+
+
+    // var p = document.createElement("p");
+    // p.textContent = obj.price;
+    // button.appendChild(p);
   });
 }
 
@@ -97,18 +123,26 @@ function CA_reloadCart() {
     var nItem = document.createElement("ons-list-item");
     CA_cartObj.appendChild(nItem);
 
-    var left = document.createElement("label");
-    CA_cartElement.forEach(value => {
-      left[value] = obj[value];
-    })
-    left.textContent = left.goodsName;
+    var name = document.createElement("label");
+    // CA_cartElement.forEach(value => {
+    //   name[value] = obj[value];
+    // });
+    name.style = "width: 40%;";
+    name.textContent = obj.goodsName;
 
-    var right = document.createElement("input");
-    right.type = "number";
-    right.style = "width: 30px;";
-    right.value = left.num;
-    right.oninput = function () {
+    var subtotal = document.createElement("input");
+    subtotal.type = "number";
+    subtotal.style = "width: 40%; text-align: right;";
+    subtotal.value = obj.price * obj.num;
+    subtotal.readOnly = true;
+
+    var num = document.createElement("input");
+    num.type = "number";
+    num.style = "width: 30px;";
+    num.value = obj.num;
+    num.oninput = function () {
       CA_cartList[index].num = CA_keepPositive(this);
+      subtotal.value = CA_cartList[index].num * CA_cartList[index].price;
       CA_calcTotalPrice();
     }
 
@@ -118,8 +152,9 @@ function CA_reloadCart() {
     del.index = index;
     del.onclick = () => CA_removeCartList(this.index);
 
-    nItem.appendChild(left);
-    nItem.appendChild(right);
+    nItem.appendChild(name);
+    nItem.appendChild(num);
+    nItem.appendChild(subtotal);
     nItem.appendChild(del);
   });
 }
@@ -148,7 +183,7 @@ function CA_onSelectedSeat(seatNum) {
 
 function CA_pushDB(seatNum) {
   var now = new Date();
-  const currentDate = now.getFullYear() + "/" + (now.getMonth() + 1) + "/" + now.getDate() + "_" + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
+  const currentDate = now.getFullYear() + "/" + (now.getMonth() + 1) + "/" + now.getDate() + "/" + now.getHours() + "/" + now.getMinutes() + "/" + now.getSeconds();
   var orderId = 1;
   pullRecords("OrderLog")
     .then(function (r) {
@@ -159,7 +194,7 @@ function CA_pushDB(seatNum) {
       // カートの中身をすべてDBに登録する
       while (CA_cartList.length) {
         var value = CA_cartList.shift();
-        addRecord("OrderLog", orderId, value.objectId, currentDate, value.num, value.price, seatNum)
+        addRecord("OrderLog", orderId, value.objectId, currentDate, value.num, value.price * value.num, seatNum)
           .then(function () {
             if (value.galleyMode) {
               addRecord("Galley", orderId, value.objectId, 1, 0, value.num, seatNum)

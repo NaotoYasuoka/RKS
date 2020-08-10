@@ -1,12 +1,12 @@
 /*
 ===登録時の引数の順番===
 商品テーブル ["galleyMode", "inStock", "goodsName", "price", "isNewest"];
-注文履歴テーブル ["orderLogId", "goodsObjectId", "orderDate", "number", "price", seatNum];
+注文履歴テーブル ["orderLogId", "goodsObjectId", "number", "subtotal", "seatNum"];
 厨房テーブル ["orderLogId", "goodsObjectId", "team", "state", "number", "seatNum"];
 
 ===取得時の辞書のキー名===
 商品テーブル ["objectId", "galleyMode", "inStock", "goodsName", "price", "isNewest"];
-注文履歴テーブル ["orderLogId", "goodsObjectId", "orderDate", "number", "price", "seatNum"];
+注文履歴テーブル ["orderLogId", "goodsObjectId", "orderDate", "number", "subtotal", "seatNum"];
 厨房テーブル ["orderLogId", "goodsObjectId", "team", "state", "number", "seatNum"];
 
 ===使用例===
@@ -36,12 +36,12 @@ var DB_Galley = ncmb.DataStore("Galley");
 
 // 登録時の引数の順番は各テーブル以下の配列の順番に合わせてください
 const DB_GoodsAttributes = ["galleyMode", "inStock", "goodsName", "price", "isNewest"];
-const DB_OrderLogAttributes = ["orderLogId", "goodsObjectId", "orderDate", "number", "price", "seatNum"];
+const DB_OrderLogAttributes = ["orderLogId", "goodsObjectId", "orderDate", "number", "subtotal", "seatNum"];
 const DB_GalleyAttributes = ["orderLogId", "goodsObjectId", "team", "state", "number", "seatNum"];
 
 // 取得時の返り値の辞書設定
 const DB_GoodsElement = ["objectId", "galleyMode", "inStock", "goodsName", "price", "isNewest"];
-const DB_OrderLogElement = ["orderLogId", "goodsObjectId", "orderDate", "number", "price"];
+const DB_OrderLogElement = ["orderLogId", "goodsObjectId", "orderDate", "number", "subtotal"];
 const DB_GalleyElement = ["orderLogId", "goodsObjectId", "team", "state", "number", "seatNum"];
 
 // 各テーブルの主キー
@@ -331,7 +331,7 @@ function NCMB_TranslateIdsToNames(success, failed, ids) {
       GoodsList = r;
       var nameList = [];
       var idList = [];
-      GoodsList.forEach(function (value) { idList.push(value[0]); nameList.push(value[3]); })
+      GoodsList.forEach(function (value) { idList.push(value.objectId); nameList.push(value.goodsName); })
       ids.forEach(function (value) { names.push(nameList[idList.indexOf(value)]) });
       success(names);
     })
