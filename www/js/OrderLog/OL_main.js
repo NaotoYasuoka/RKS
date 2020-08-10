@@ -8,7 +8,7 @@ document.addEventListener('show', function(event){
   if(event.target.matches('#PM_main')){
     loadTable("PM_table","Goods","goodsObjectId");
   }else if(event.target.matches('#OL_main')){
-    loadTable("OL_table","OrderLog","createDate");
+    loadTable("OL_table","OrderLog","orderLogId");
   }else if(event.target.matches('#OD_main')){
     loadTable("OD_table","Galley","seatNum");
   }else{
@@ -19,9 +19,9 @@ document.addEventListener('show', function(event){
 /* テーブルのロード */
 function loadTable(tableID, dbname, fixed){
   pullRecords(dbname).then(function(r){
-    list = r;
+    obj = r;
     deleteTable(tableID);
-    makeTable(tableID, dbname, list, fixed);
+    makeTable(tableID, dbname, obj, fixed);
   }).catch(function (e){
     alert(e);
   });
@@ -39,28 +39,25 @@ function deleteTable(id) {
 
 
 /* テーブル作成 */
-function makeTable(tableID, dbname, list, fixed){
-  var GoodsObIDList = new Array(list.length);
+function makeTable(tableID, dbname, obj, fixed){
+  var GoodsObIDList = new Array(obj.length);
+
+  // GoodsObjectID → 商品名取得
   switch(dbname){
     case "Goods":
-      var goodsIdNum = "null";
       break;
     case "OrderLog":
-      var goodsIdNum = elementOrderLogList.indexOf("goodsObjectId");
-      break;
     case "Galley":
-      var goodsIdNum = elementGalleyList.indexOf("goodsObjectId");
-      break;
-    default:
-      alert("Internal Error: Part of the program is wrong. (Error location: makeTable() function)")
+      for(i=0; i < obj.length; i++){
+        GoodsObIDList[i] = obj[i]["goodsObjectId"];
+      }
       break;
   }
-  for(i=0; i < list.length && goodsIdNum != "null"; i++){
-    GoodsObIDList[i] = list[i][goodsIdNum];
-  }
+
   getGoodsNames(dbname, GoodsObIDList).then(function(r){
     let goodsNameList = r;
-    makeRow(tableID, dbname, list, goodsNameList, fixed);
+    makeRow(tableID, dbname, obj, goodsNameList, fixed);
+
   })
   .catch(function(e){
     alert(e);
@@ -88,73 +85,56 @@ function Pr_getGoodsNames(success, failed, dbname, list){
   }
 }
 
-function makeRow(tableID, dbname, list, goodsNameList, fixed){
-  switch(dbname){
-    case "Goods":
-      var fixedNum = elementGoodsList.indexOf(fixed);
-      break;
-    case "OrderLog":
-      var fixedNum = elementOrderLogList.indexOf(fixed);
-      break;
-    case "Galley":
-      var fixedNum = elementGalleyList.indexOf(fixed);
-      break;
-    default:
-      alert("Internal Error: Part of the program is wrong. (Error location: makeRow() function)");
-      break;
-  }
+/* テーブルのRow部分作成 */
+function makeRow(tableID, dbname, obj, goodsNameList, fixed){
   var value="";
   var old_value="";
   var tableEle = document.getElementById(tableID);
-  for (var i=0; i < list.length; i++){
+
+  for (var i=0; i < obj.length; i++){
     var tr = document.createElement('tr');
-    if(old_value != list[i][fixedNum]){
-      for(j=i+1, c=1, old_value=list[i][fixedNum]; j < list.length && old_value == list[j][fixedNum]; j++, c++);
+
+    if(old_value != obj[i][fixed]){
+      modificat = 1;
+      for(var j=i+1,c=1, old_value=obj[i][fixed]; j < obj.length && old_value == obj[j][fixed]; j++, c++);
       switch(dbname){
         case "Goods":
           break;
         case "OrderLog":
-          var td = document.createElement('td');
-          td.style.textAlign = "center";
-          td.rowSpan = c;
-          td.innerHTML = list[i][fixedNum];
-          tr.appendChild(td);
-          break;
         case "Galley":
-          // 座席番号の表示
           var td = document.createElement('td');
           td.style.textAlign = "center";
           td.rowSpan = c;
-          td.innerHTML = list[i][fixedNum];
+          td.innerHTML = obj[i][fixed];
           tr.appendChild(td);
           break;
         default:
           alert("Internal Error: Part of the program is wrong. (Error location: makeRow() function)");
           break;
       }
+    }else{
+      modificat = 0;
     }
-    alert(list)
     switch(dbname){
       case "Goods":
-        tr = PM_makeCell(tr, list, i);
+        tr = PM_makeCell(tr, obj, i);
         break;
       case "OrderLog":
-        tr = OL_makeCell(tr, list, goodsNameList, i);
-        if(value != list[i][fixedNum]){
-          var sum_price=0;
-          for(j=i+1, count=1, value=list[i][fixedNum]; j < list.length && value == list[j][fixedNum]; j++, count++){
-            sum_price += list[i][elementOrderLogList.indexOf("price")];
+        tr = OL_makeCell(tr, obj, goodsNameList, i);
+        if(modificat){
+          var sum_price = 0;
+          for(j=i; j < i+c; j++){
+            sum_price += obj[j]["subtotal"];
           }
           var td = document.createElement('td');
           td.style.textAlign = "center";
-          td.rowSpan = count;
+          td.rowSpan = c;
           td.innerHTML = sum_price;
           tr.appendChild(td);
         }
-        alert(goodsNameList)
         break;
       case "Galley":
-        tr = OD_makeCell(tr, list, goodsNameList, i);
+        tr = OD_makeCell(tr, obj, goodsNameList, i);
         break;
       default:
         break;
@@ -164,42 +144,40 @@ function makeRow(tableID, dbname, list, goodsNameList, fixed){
 }
 
 
-function PM_makeCell(tr, list, i){
-  for (var j=1; j < 5; j++) {
-    var td = document.createElement('td');
-    td.style.textAlign = "center";
-    var value = list[i][j];
-    switch(j){
-      case 1:
-        if(value == 1){
-          td.innerHTML = "<span style='float: center;'>👀</span>";
-        }else{
-          td.innerHTML = "<span style='float: center;'></span>";
-        }
-        break; 
-      case 2:
-        if(value == 1){
-          td.innerHTML = "<span style='float: center;'>○</span>";
-        }else{
-          td.innerHTML = "<span style='float: center;'>X</span>";
-        }
-        break;        
-      case 3:
-        td.innerHTML = "<span style='float: left;'>"+value+"</span> <span style='float: right;'><input type='button' id="+i+" value='編集' onclick='getId(this);'> </span>";
-        break;     
-      case 4:
-        td.innerHTML = "<span style='float: center;'>"+value+"</span>";
-        break;  
-      default:
-        break;
-    }
-    tr.appendChild(td);
+function PM_makeCell(tr, obj, i){
+  // 厨房モードの有無の表示
+  var td = document.createElement('td');
+  td.style.textAlign = "center";
+  if(obj[i]["galleyMode"]){
+    td.innerHTML = "<span style='float: center;'>👀</span>";
+  }else{
+    td.innerHTML = "<span style='float: center;'></span>";
   }
+  tr.appendChild(td);
+  // 在庫の有無の表示
+  var td = document.createElement('td');
+  td.style.textAlign = "center";
+  if(obj[i]["inStock"] == 1){
+    td.innerHTML = "<span style='float: center;'>○</span>";
+  }else{
+    td.innerHTML = "<span style='float: center;'>X</span>";
+  }
+  tr.appendChild(td);
+  // 商品名の表示
+  var td = document.createElement('td'); 
+  td.innerHTML = "<span style='float: left;'>"+obj[i]["goodsName"]+"</span> <span style='float: right;'><input type='button' id="+i+" value='編集' onclick='getId(this);'> </span>";
+  tr.appendChild(td);
+  // 値段の表示
+  var td = document.createElement('td');
+  td.style.textAlign = "center";
+  td.innerHTML = "<span style='float: center;'>"+obj[i]["price"]+"</span>";
+  tr.appendChild(td);
+
   return tr;
 }
 
 
-function OL_makeCell(tr, list, goodsNameList, i){
+function OL_makeCell(tr, obj, goodsNameList, i){
   // 商品名の表示
   var td = document.createElement('td');
   td.innerHTML = goodsNameList[i];
@@ -207,13 +185,13 @@ function OL_makeCell(tr, list, goodsNameList, i){
   // 個数の表示
   var td = document.createElement('td');
   td.style.textAlign = "center";
-  td.innerHTML = list[i][elementOrderLogList.indexOf("number")];
+  td.innerHTML = obj[i]["number"];
   tr.appendChild(td);
   return tr;
 }
 
 
-function OD_makeCell(tr, list, goodsNameList, i){
+function OD_makeCell(tr, obj, goodsNameList, i){
   // 商品名の表示
   var td = document.createElement('td');
   td.innerHTML = goodsNameList[i];
@@ -221,13 +199,13 @@ function OD_makeCell(tr, list, goodsNameList, i){
   // 個数の表示
   var td = document.createElement('td');
   td.style.textAlign = "center";
-  td.innerHTML = list[i][4];
+  td.innerHTML = obj[i]["number"];
   tr.appendChild(td);
   // ボタンの作成
   var td = document.createElement('td');
   td.className = "OD_table4";
   td.style.textAlign = "center";
-  if(list[i][3] == 0){
+  if(obj[i]["state"] == 0){
     td.innerHTML = "<ons-button style='width:100%;height:100%;' id="+ 'back_' +i+ " disabled='true' onclick='getId(GalleyList, this.id);'>←</ons-button>";
   }else{
     td.innerHTML = "<ons-button style='width:100%;height:100%;' id="+'back_' +i+ "  onclick='OD_stateUpedate(GalleyList, this.id);'>←</ons-button>";
@@ -237,7 +215,7 @@ function OD_makeCell(tr, list, goodsNameList, i){
   var td = document.createElement('td');
   td.className = "OD_table5";
   td.style.textAlign = "center";
-  td.innerHTML = stateList[list[i][3]];  
+  td.innerHTML = stateList[obj[i]["state"]];  
   tr.appendChild(td);
   // ボタンの作成
   var td = document.createElement('td');

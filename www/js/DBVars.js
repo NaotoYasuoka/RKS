@@ -1,4 +1,4 @@
 // js/ProductManagement/PM_main.js
-let GoodsList=[];
-let GalleyList=[];
-let OrderLogList=[];
+let GoodsObjects;
+let GalleyObjects;
+let OrderLogObjects;

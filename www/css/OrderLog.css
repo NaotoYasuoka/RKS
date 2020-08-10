@@ -1,0 +1,14 @@
+/* This is a CSS file */
+.OL_table1{
+  width:20%;
+}
+.OL_table2{
+  width:50%;
+}
+.OL_table3{
+  width:15%;
+}
+.OL_table4{
+  width:15%;
+  border-right: 1px solid rgba(255, 255, 255, 0);
+}
