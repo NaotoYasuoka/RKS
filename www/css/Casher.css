@@ -15,20 +15,29 @@
 } */
 
 .money {
-  font-size: 200%;
+  font-size: 3.0em;
   text-align: right;
 }
-.CA_r {
-  /* padding: 2px 2px; */
-  height: 20%;
+.CA_row {
+  padding: 15px 15px;
+  height: 100px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
-.CA_b {
+.CA_button {
   width: 30%;
-  height: 90%;
+  height: 95%;
 }
-.CA_t {
-  font-size: 2.0em;
+.CA_buttonText {
+  font-size: 1.5em;
   font-weight: bold;
   white-space: pre;
   text-align: center;
+}
+.CA_decideButton {
+  text-align: center;
+  font-weight: bold;
+  background: red;
 }

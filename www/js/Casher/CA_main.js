@@ -35,48 +35,22 @@ document.addEventListener('show', function (event) {
 function CA_loadGoods(r) {
   var nRow;
   r.forEach(function (obj, index) {
-    switch(index % 3) {
-      case(0):
-        break;
-      case(1):
-        break;
-      case(2):
-        break;
-      default:
-        alert("www/js/Casher/CA_main.js");
-        break;
-    }
     if (index % 3 == 0) {
-      nRow = document.createElement("ons-list-item");
-      nRow.className = "CA_r";
+      nRow = document.createElement("div");
+      nRow.className = "CA_row";
       document.getElementById("CA_goodsList").appendChild(nRow);
     }
-    var button = document.createElement("button");
-    if (obj.inStock == 1) {
-      CA_buttonElement.forEach(value => {
-        button[value] = obj[value];
-      });
-    }
+    var button = document.createElement("ons-button");
+    if (obj.inStock == 1) CA_buttonElement.forEach(value => { button[value] = obj[value]; });
     else button.disabled = true;
-    button.className = "CA_b";
+    button.className = "CA_button";
     button.onclick = function () { CA_showSelectNum(this); };
     nRow.appendChild(button);
 
     var t = document.createElement("div");
-    t.className = "CA_t";
+    t.className = "CA_buttonText";
     t.textContent = obj.goodsName + "\n" + obj.price;
     button.appendChild(t);
-
-
-    // var str = "";
-    // if (obj.inStock == 1) CA_buttonElement.forEach(value => str += value + "=\"" + obj[value] + "\"");
-    // else 
-    // nRow.innerHTML += "<ons-button " + str + " onclick=\"CA_showSelectNum(this)\">" + obj.goodsName + "<br>" + obj.price + "</ons-button>";
-
-
-    // var p = document.createElement("p");
-    // p.textContent = obj.price;
-    // button.appendChild(p);
   });
 }
 
@@ -121,6 +95,7 @@ function CA_reloadCart() {
   // リスト内の商品を配置
   CA_cartList.forEach(function (obj, index) {
     var nItem = document.createElement("ons-list-item");
+    nItem.id = "CA_cartRow";
     CA_cartObj.appendChild(nItem);
 
     var name = document.createElement("label");
@@ -141,7 +116,9 @@ function CA_reloadCart() {
     num.style = "width: 30px;";
     num.value = obj.num;
     num.oninput = function () {
-      CA_cartList[index].num = CA_keepPositive(this);
+      // CA_cartList[index].num = CA_keepPositive(this);
+      this.value = this.value < 1 ? 1 : this.value;
+      CA_cartList[index].num = this.value;
       subtotal.value = CA_cartList[index].num * CA_cartList[index].price;
       CA_calcTotalPrice();
     }
@@ -183,7 +160,7 @@ function CA_onSelectedSeat(seatNum) {
 
 function CA_pushDB(seatNum) {
   var now = new Date();
-  const currentDate = now.getFullYear() + "/" + (now.getMonth() + 1) + "/" + now.getDate() + "/" + now.getHours() + "/" + now.getMinutes() + "/" + now.getSeconds();
+  const currentDate = now.getFullYear() + "/" + (now.getMonth() + 1) + "/" + now.getDate() + "_" + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
   var orderId = 1;
   pullRecords("OrderLog")
     .then(function (r) {
@@ -227,7 +204,39 @@ function CA_removeCartList(i) {
   CA_calcTotalPrice();
 }
 
-function CA_keepPositive(numInput) {
-  if (numInput.value < 1) numInput.value = 1;
-  return numInput.value;
+/*
+ * スワイプイベント設定
+ */
+function setSwipe(elem) {
+  // let t = document.querySelector(elem);
+  let t = elem;
+  let startX;		// タッチ開始 x座標
+  let startY;		// タッチ開始 y座標
+  let moveX;	// スワイプ中の x座標
+  let moveY;	// スワイプ中の y座標
+  let dist = 30;	// スワイプを感知する最低距離（ピクセル単位）
+
+  // タッチ開始時： xy座標を取得
+  t.addEventListener("touchstart", function (e) {
+    e.preventDefault();
+    startX = e.touches[0].pageX;
+    startY = e.touches[0].pageY;
+  });
+
+  // スワイプ中： xy座標を取得
+  t.addEventListener("touchmove", function (e) {
+    e.preventDefault();
+    moveX = e.changedTouches[0].pageX;
+    moveY = e.changedTouches[0].pageY;
+  });
+
+  // タッチ終了時： スワイプした距離から左右どちらにスワイプしたかを判定する/距離が短い場合何もしない
+  t.addEventListener("touchend", function (e) {
+    if (startX > moveX && startX > moveX + dist) {		// 右から左にスワイプ
+      alert("右から左");
+    }
+    else if (startX < moveX && startX + dist < moveX) {	// 左から右にスワイプ
+      alert("左から右");
+    }
+  });
 }
