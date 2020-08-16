@@ -253,35 +253,31 @@ function getID(id){
 
 var makeDialog = function(ClickInfoObjects) {
   var dialog = document.getElementById(dialogIDObjects[ClickInfoObjects.name]);
+  var obj = DBObj
   if (dialog) {
     dialog.show();
-    editDialogSelector(ClickInfoObjects);
+    editDialogSelector(obj, ClickInfoObjects);
   }else {
     ons.createElement(dialogPathObjects[ClickInfoObjects.name], { append: true })
     .then(function(dialog) {
       dialog.show();
-      editDialogSelector(ClickInfoObjects);
+      editDialogSelector(obj, ClickInfoObjects);
     });
   }
 };
 
-function editDialogSelector(ClickInfoObjects){
-  pullRecords(dbNameObjects[ClickInfoObjects.name]).then(function(r){
-    var obj = r;
-    switch(ClickInfoObjects.name){
-      case "PM":
-        PM_editDialog(obj, ClickInfoObjects);
-        break;
-      case "OL":
-        OL_editDialog(obj, ClickInfoObjects);
-        break;
-      case "OD":
-        OD_editDialog(obj, ClickInfoObjects);
-        break;
-    }
-  }).catch( function(e){
-    alert(e);
-  })
+function editDialogSelector(obj, ClickInfoObjects){
+  switch(ClickInfoObjects.name){
+    case "PM":
+      PM_editDialog(obj, ClickInfoObjects);
+      break;
+    case "OL":
+      OL_editDialog(obj, ClickInfoObjects);
+      break;
+    case "OD":
+      OD_editDialog(obj, ClickInfoObjects);
+      break;
+  }
 }
 
 /* 商品追加・編集画面のテキスト表示 */

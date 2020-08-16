@@ -31,6 +31,7 @@ function PM_saveGoods(obj, id){
       }
       if( "addButton" == ClickInfoObjects.state){
         addRecord("Goods", galley_switch, stock_switch, GoodsName, price, 1).then(function(r){
+          alert(r)
           loadTable("PM_table","Goods","goodsObjectId");
         }).catch(function (e){
           alert(e);
