@@ -1,10 +1,13 @@
 // This is a JavaScript file
+let DBObj={};
 const stateObjects={ 0:'準備待ち', 1:'準備中', 2:'配膳待ち' };
-dialogIDObjects={"PM":"PM_dialog", "OL":"OL_dialog", "OD":"OD_dialog"};
-dialogPathObjects={"PM":"html/ProductManagement/PM_dialog.html", 
+const dialogIDObjects={"PM":"PM_dialog", "OL":"OL_dialog", "OD":"OD_dialog"};
+const dialogPathObjects={"PM":"html/ProductManagement/PM_dialog.html", 
             "OL":"html/OrderLog/OL_dialog.html", 
             "OD":"html/OrderDisplay/OD_dialog.html"};
-dbNameObjects={"PM":"Goods", "OL":"OrderLog", "OD":"Galley"};
+const dbNameObjects={"PM":"Goods", "OL":"OrderLog", "OD":"Galley"};
+let ClickInfoObjects={name:null, state:null, num:-2};
+
 
 document.addEventListener('show', function(event){
   if(event.target.matches('#PM_main')){
@@ -21,9 +24,9 @@ document.addEventListener('show', function(event){
 /* テーブルのロード */
 function loadTable(tableID, dbname, fixed){
   pullRecords(dbname).then(function(r){
-    obj = r;
+    DBObj = r;
     deleteTable(tableID);
-    makeTable(tableID, dbname, obj, fixed);
+    makeTable(tableID, dbname, DBObj, fixed);
   }).catch(function (e){
     alert(e);
   });
@@ -217,9 +220,9 @@ function OD_makeCell(tr, obj, goodsNameList, i){
   td.className = "OD_table4";
   td.style.textAlign = "center";
   if(obj[i]["state"] == 0){
-    td.innerHTML = "<ons-button style='width:100%;height:100%;' id="+ 'OL_back_' +i+ " disabled='true' onclick='getId(GalleyList, this.id);'>←</ons-button>";
+    td.innerHTML = "<ons-button style='width:100%;height:100%;' id="+ 'OD_back_' +i+ " disabled='true'>←</ons-button>";
   }else{
-    td.innerHTML = "<ons-button style='width:100%;height:100%;' id="+'OL_back_' +i+ "  onclick='OD_stateUpedate(GalleyList, this.id);'>←</ons-button>";
+    td.innerHTML = "<ons-button style='width:100%;height:100%;' id="+'OD_back_' +i+ "  onclick='updataState(this.id);'>←</ons-button>";
   }
   tr.appendChild(td);
   // 状態の表示
@@ -231,45 +234,49 @@ function OD_makeCell(tr, obj, goodsNameList, i){
   // ボタンの作成
   var td = document.createElement('td');
   td.style.textAlign = "center";
-  td.innerHTML = "<ons-button style='width:100%;height:100%;' id="+'OD_next_'+i+" onclick='OD_stateUpedate(GalleyList, this.id);'>→</ons-button>";
+  if(obj[i]["state"] == 0){
+    td.innerHTML = "<ons-button style='width:100%;height:100%;' id="+'OD_next_'+i+" onclick='getID(this.id);'>→</ons-button>";
+  }else{
+    td.innerHTML = "<ons-button style='width:100%;height:100%;' id="+'OD_next_'+i+" onclick='updataState(this.id);'>→</ons-button>";
+  }
   tr.appendChild(td);
   return tr;
 }
 
 function getID(id){
   var splitID = id.split("_");
-  makeDialog(splitID[0], splitID[1], splitID[2]);
+  ClickInfoObjects.name = splitID[0];
+  ClickInfoObjects.state = splitID[1];
+  ClickInfoObjects.num = splitID[2];
+  makeDialog(ClickInfoObjects);
 }
 
-var makeDialog = function(name, state, num) {
-  var dialog = document.getElementById(dialogIDObjects[name]);
-  alert(dialog);
+var makeDialog = function(ClickInfoObjects) {
+  var dialog = document.getElementById(dialogIDObjects[ClickInfoObjects.name]);
   if (dialog) {
-    alert("表示します");
     dialog.show();
-    editDialogSelector(name, state, num);
+    editDialogSelector(ClickInfoObjects);
   }else {
-    ons.createElement(dialogPathObjects[name], { append: true })
+    ons.createElement(dialogPathObjects[ClickInfoObjects.name], { append: true })
     .then(function(dialog) {
-      alert("表示します");
       dialog.show();
-      editDialogSelector(name, state, num);
+      editDialogSelector(ClickInfoObjects);
     });
   }
 };
 
-function editDialogSelector(name, state, num){
-  pullRecords(dbNameObjects[name]).then(function(r){
+function editDialogSelector(ClickInfoObjects){
+  pullRecords(dbNameObjects[ClickInfoObjects.name]).then(function(r){
     var obj = r;
-    switch(name){
+    switch(ClickInfoObjects.name){
       case "PM":
-        PM_editDialog(obj, num);
+        PM_editDialog(obj, ClickInfoObjects);
         break;
       case "OL":
-        OL_editDialog(obj, num);
+        OL_editDialog(obj, ClickInfoObjects);
         break;
       case "OD":
-        OD_editDialog(obj, state, num);
+        OD_editDialog(obj, ClickInfoObjects);
         break;
     }
   }).catch( function(e){
@@ -278,8 +285,8 @@ function editDialogSelector(name, state, num){
 }
 
 /* 商品追加・編集画面のテキスト表示 */
-function PM_editDialog(obj, num){
-  if(num == -1){
+function PM_editDialog(obj, ClickInfoObjects){
+  if("addButton" == ClickInfoObjects.state){
     document.getElementById("PM_addPE_Title").innerText = "商品追加";
     // 厨房モード：ON 
     var switch_value = document.getElementById("PM_switch_1");
@@ -297,7 +304,7 @@ function PM_editDialog(obj, num){
   }else{
     document.getElementById("PM_addPE_Title").innerText = "商品編集";
     // 厨房モードの選択
-    if(obj[num]["galleyMode"] == 1){
+    if(obj[ClickInfoObjects.num]["galleyMode"] == 1){
       var switch_value = document.getElementById("PM_switch_1");
       switch_value.checked = true;
     }else{
@@ -305,7 +312,7 @@ function PM_editDialog(obj, num){
       switch_value.checked = false;
     }
     // 在庫の有無の選択
-    if(obj[num]["inStock"] == 1){
+    if(obj[ClickInfoObjects.num]["inStock"] == 1){
       var switch_value = document.getElementById("PM_switch_2");
       switch_value.checked = true;
     }else{
@@ -313,17 +320,17 @@ function PM_editDialog(obj, num){
       switch_value.checked = false;
     }
     // 商品名の表示
-    document.getElementById( "PM_textbox_1" ).value = obj[num]["goodsName"] ;
+    document.getElementById( "PM_textbox_1" ).value = obj[ClickInfoObjects.num]["goodsName"] ;
     // 金額の表示
-    document.getElementById( "PM_textbox_2" ).value = obj[num]["price"] ;
+    document.getElementById( "PM_textbox_2" ).value = obj[ClickInfoObjects.num]["price"] ;
     // 削除ボタンを押せなくする
     var button_value = document.getElementById("PM_deleteButton");
     button_value.disabled = false;
   }
 }
 
-function OD_editDialog(obj, state, num){
-  goodsNum = obj[num]["number"];
+function OD_editDialog(obj, ClickInfoObjects){
+  goodsNum = obj[ClickInfoObjects.num]["number"];
   for(var i=goodsNum+1; i <= 6;i++){
     var buttonID = "OD_button_" + String(i);
     var button_value = document.getElementById(buttonID);
@@ -331,8 +338,15 @@ function OD_editDialog(obj, state, num){
   }
 }
 
-function OL_editDialog(obj, num){
+function OL_editDialog(obj, ClickInfoObjects){
   OL_OrderDate.innerHTML = "会計日時：";
   OL_seatNum.innerHTML = "座席番号："
 
 }
+
+/*dialogから商品管理画面への遷移*/
+var hideDialog = function(id) {
+  document
+    .getElementById(id)
+    .hide();
+};

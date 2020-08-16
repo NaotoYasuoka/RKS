@@ -28,10 +28,10 @@
 
     <ons-list-item>
       <div class="center">
-        <ons-button id="PM_deleteButton" onclick="deleteGoods('PM_dialog')">　削除　</ons-button>
+        <ons-button id="PM_deleteButton" onclick="PM_deleteGoods(DBObj,'PM_dialog')">　削除　</ons-button>
       </div>
       <div class="right">
-        <ons-button onclick="saveGoods('PM_dialog')" id="PM_addButton" class="coler_back_red">　　決定　　</ons-button>
+        <ons-button onclick="PM_saveGoods(DBObj, 'PM_dialog')" id="PM_addButton" class="coler_back_red">　　決定　　</ons-button>
       </div>
     </ons-list-item>
 
