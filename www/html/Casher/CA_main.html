@@ -13,16 +13,17 @@
 	</ons-toolbar>
 	<ons-row style="height: 100%;">
 		<!-- 左側の商品ボタンたち -->
-		<ons-col id="CA_goodsList" width=70% style="height: 100%; overflow-y: scroll; background: white;">
-		</ons-col>
+		<ons-col id="CA_goodsList" width=65%></ons-col>
+
 		<!-- 右側 -->
-		<ons-col width=30% style="height: 100%; overflow-y: scroll;">
+		<ons-col style="height: 100%;">
 			<!-- カート -->
-			<ons-list id="CA_cart" style="height: 100%;"></ons-list>
-		</ons-col>
-		<ons-col style="bottom:0px; right:0px; position:fixed; width:30%;">
-			<input type="number" id="CA_totalPrice" readonly style="width: 100%;" class="money">
-			<ons-button onclick="CA_showSelectSeat()" style="width: 100%;" class="CA_decideButton">決定</ons-button>
+			<ons-list id="CA_cart"></ons-list>
+			<!-- </ons-col> -->
+			<!-- <ons-col style="bottom:0px; right:0px; position:fixed; width:30%;"> -->
+			<input type="number" id="CA_totalPrice" readonly class="money">
+			<ons-button id="CA_decideButton" onclick="CA_showSelectSeat()">決定</ons-button>
+			<!-- </ons-col> -->
 		</ons-col>
 	</ons-row>
 </ons-page>
