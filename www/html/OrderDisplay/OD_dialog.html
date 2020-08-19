@@ -2,45 +2,47 @@
 <ons-alert-dialog id="OD_dialog" cancelable animation="none">
 
   <div id="PM_addPE_Title" class="alert-dialog-title">個数選択画面</div>
-
   <ons-list>
     <ons-list-header>商品個数の選択</ons-list-header>
     <ons-list-item modifier="nodivider">
       <div class="center">
-        <ons-button id="OD_button_1" onclick="OD_selectNum(this.id)">　　 1 　　</ons-button>
+        <ons-button id="OD_button_1" onclick="BeginLoading(), OD_selectNum(DBObj, this.id)">　　 1 　　</ons-button>
       </div>
       <div class="right">
-        <ons-button id="OD_button_2" onclick="OD_selectNum(this.id)">　　 2 　　</ons-button>
+        <ons-button id="OD_button_2" onclick="BeginLoading(), OD_selectNum(DBObj, this.id)">　　 2 　　</ons-button>
       </div>
     </ons-list-item>
     <ons-list-item modifier="nodivider">
       <div class="center">
-        <ons-button id="OD_button_3" onclick="OD_selectNum(this.id)">　　 3 　　</ons-button>
+        <ons-button id="OD_button_3" onclick="BeginLoading(), OD_selectNum(DBObj, this.id)">　　 3 　　</ons-button>
       </div>
       <div class="right">
-        <ons-button id="OD_button_4" onclick="OD_selectNum(this.id)">　　 4 　　</ons-button>
+        <ons-button id="OD_button_4" onclick="BeginLoading(), OD_selectNum(DBObj, this.id)">　　 4 　　</ons-button>
       </div>
     </ons-list-item>
     <ons-list-item>
       <div class="center">
-        <ons-button id="OD_button_5" onclick="OD_selectNum(this.id)">　　 5 　　</ons-button>
+        <ons-button id="OD_button_5" onclick="BeginLoading(), OD_selectNum(DBObj, this.id)">　　 5 　　</ons-button>
       </div>
       <div class="right">
-        <ons-button id="OD_button_6" onclick="OD_selectNum(this.id)">　　 6 　　</ons-button>
+        <ons-button id="OD_button_6" onclick="BeginLoading(), OD_selectNum(DBObj, this.id)">　　 6 　　</ons-button>
       </div>
     </ons-list-item>
     <ons-list-header>キーボードによる個数入力</ons-list-header>
     <ons-list-item >
       <input type="number" id="OD_textbox" class="text-input" placeholder="個数">
       <div class="right">
-        <ons-button onclick="OD_selectNum('textbox_1')" class="coler_back_red">決定</ons-button>
+        <ons-button onclick="BeginLoading(), OD_selectNum(DBObj, 'OD_textbox_1')" class="coler_back_red">決定</ons-button>
       </div>
     </ons-list-item>
-    <!-- <ons-list-item>
-      <div class="right">
-        <ons-button onclick="saveGoods('PM_dialog')" id="PM_addButton" class="coler_back_red">　　決定　　</ons-button>
-      </div>
-    </ons-list-item> -->
+
+      <ons-modal direction="up">
+  <div style="text-align: center">
+    <p>
+      <ons-icon icon="md-spinner" size="28px" spin></ons-icon> Loading...
+    </p>
+  </div>
+</ons-modal>
+
 
   </ons-list>
-</ons-alert-dialog>

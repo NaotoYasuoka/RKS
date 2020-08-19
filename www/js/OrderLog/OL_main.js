@@ -220,9 +220,9 @@ function OD_makeCell(tr, obj, goodsNameList, i){
   td.className = "OD_table4";
   td.style.textAlign = "center";
   if(obj[i]["state"] == 0){
-    td.innerHTML = "<ons-button style='width:100%;height:100%;' id="+ 'OD_back_' +i+ " disabled='true'>←</ons-button>";
+    td.innerHTML = "<ons-button style='width:100%;height:100%;' id="+'OD_back_'+i+" disabled='true'>←</ons-button>";
   }else{
-    td.innerHTML = "<ons-button style='width:100%;height:100%;' id="+'OD_back_' +i+ "  onclick='updataState(this.id);'>←</ons-button>";
+    td.innerHTML = "<ons-button style='width:100%;height:100%;' id="+'OD_back_'+i+" onclick='BeginLoading(), OD_updateState(DBObj, this.id)'>←</ons-button>";
   }
   tr.appendChild(td);
   // 状態の表示
@@ -237,7 +237,7 @@ function OD_makeCell(tr, obj, goodsNameList, i){
   if(obj[i]["state"] == 0){
     td.innerHTML = "<ons-button style='width:100%;height:100%;' id="+'OD_next_'+i+" onclick='getID(this.id);'>→</ons-button>";
   }else{
-    td.innerHTML = "<ons-button style='width:100%;height:100%;' id="+'OD_next_'+i+" onclick='updataState(this.id);'>→</ons-button>";
+    td.innerHTML = "<ons-button style='width:100%;height:100%;' id="+'OD_next_'+i+" onclick='BeginLoading(), OD_updateState(DBObj, this.id)'>→</ons-button>";
   }
   tr.appendChild(td);
   return tr;
@@ -346,3 +346,15 @@ var hideDialog = function(id) {
     .getElementById(id)
     .hide();
 };
+
+
+
+function BeginLoading(){
+  var modal = document.querySelector('ons-modal');
+  modal.show();
+}
+
+function EndLoading(){
+  var modal = document.querySelector('ons-modal');
+  modal.hide();
+}
