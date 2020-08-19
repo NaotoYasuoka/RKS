@@ -113,37 +113,55 @@ function NCMB_AddRecord(success, failed, table, args) {
 }
 
 // 取得
-function pullRecords(table) {
+function pullRecords(table, pullAllGoods = false) {
   return new Promise(function (resolve, reject) {
-    NCMB_PullRecords(function (r) { resolve(r); }, function (e) { reject(e); }, table);
+    NCMB_PullRecords(function (r) { resolve(r); }, function (e) { reject(e); }, table, pullAllGoods);
   });
 }
-var NCMB_PullRecords = function (success, failed, table) {
+var NCMB_PullRecords = function (success, failed, table, pullAllGoods) {
   var arr = [];
   switch (table) {
     case ("Goods"):
-      DB_Goods.equalTo("isNewest", 1)
-        .fetchAll()
-        .then(function (objs) {
-          objs.forEach(function (obj) {
-            var tmp = {};
-            DB_GoodsElement.forEach(function(value){
-              tmp[value] = obj[value];
+      if (pullAllGoods) {
+        DB_Goods.fetchAll()
+          .then(function (objs) {
+            objs.forEach(function (obj) {
+              var tmp = {};
+              DB_GoodsElement.forEach(function (value) {
+                tmp[value] = obj[value];
+              });
+              arr.push(tmp);
             });
-            arr.push(tmp);
+            success(arr);
+          })
+          .catch(function (err) {
+            failed(err);
           });
-          success(arr);
-        })
-        .catch(function (err) {
-          failed(err);
-        });
+      }
+      else {
+        DB_Goods.equalTo("isNewest", 1)
+          .fetchAll()
+          .then(function (objs) {
+            objs.forEach(function (obj) {
+              var tmp = {};
+              DB_GoodsElement.forEach(function (value) {
+                tmp[value] = obj[value];
+              });
+              arr.push(tmp);
+            });
+            success(arr);
+          })
+          .catch(function (err) {
+            failed(err);
+          });
+      }
       break;
     case ("OrderLog"):
       DB_OrderLog.fetchAll()
         .then(function (objs) {
           objs.forEach(function (obj) {
             var tmp = {};
-            DB_OrderLogElement.forEach(function(value){
+            DB_OrderLogElement.forEach(function (value) {
               tmp[value] = obj[value];
             });
             arr.push(tmp);
@@ -162,7 +180,7 @@ var NCMB_PullRecords = function (success, failed, table) {
         .then(function (objs) {
           objs.forEach(function (obj) {
             var tmp = {};
-            DB_GalleyElement.forEach(function(value){
+            DB_GalleyElement.forEach(function (value) {
               tmp[value] = obj[value];
             });
             arr.push(tmp);
@@ -326,7 +344,7 @@ function translateIdsToNames(ids) {
 }
 function NCMB_TranslateIdsToNames(success, failed, ids) {
   var names = [];
-  pullRecords("Goods")
+  pullRecords("Goods", true)
     .then(function (r) {
       GoodsList = r;
       var nameList = [];

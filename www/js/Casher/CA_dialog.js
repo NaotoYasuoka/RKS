@@ -16,3 +16,6 @@ function CA_selectNum(id) {
       alert("error in www/html/Casher/CA_dialog.js");
   };
 }
+function CA_keepPositive(obj) {
+  obj.value = obj.value < 1 ? 1 : obj.value;
+}

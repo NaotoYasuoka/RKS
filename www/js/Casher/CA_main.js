@@ -1,6 +1,6 @@
 // This is a JavaScript file
-var CA_selectedGoodsObj;
-var CA_cartList;
+var CA_selectedGoodsObj; // CA_main.htmlで選択された商品を記憶する用
+var CA_cartList; // CA_main.htmlの右側、カートのタグ
 var CA_cartObj;
 var CA_totalPrice;
 var CA_buttonElement;
@@ -78,9 +78,7 @@ function CA_addCart(goodsNum) {
   if (i != -1) CA_cartList[i].num += goodsNum;
   else {
     var tmp = {};
-    CA_buttonElement.forEach(value => {
-      tmp[value] = CA_selectedGoodsObj[value];
-    });
+    CA_buttonElement.forEach(value => tmp[value] = CA_selectedGoodsObj[value]);
     tmp.num = goodsNum;
     CA_cartList.push(tmp);
   }
@@ -96,12 +94,28 @@ function CA_reloadCart() {
   CA_cartList.forEach(function (obj, index) {
     var nItem = document.createElement("ons-list-item");
     nItem.id = "CA_cartRow";
+    // nItem.textContent = obj.goodsName;
     CA_cartObj.appendChild(nItem);
 
-    var name = document.createElement("label");
-    // CA_cartElement.forEach(value => {
-    //   name[value] = obj[value];
-    // });
+    var name = document.createElement("button");
+    // カート内の商品の変更
+    name.onclick = function () {
+      var tmp = document.getElementsByClassName("CA_button");
+      Array.prototype.forEach.call(tmp, value => {
+        value.style = "background: green;";
+        // 変更の処理
+        value.onclick = function () {
+          CA_selectedGoodsObj = this;
+          CA_addCart(obj.num);
+          CA_removeCartList(index);
+          // 商品ボタンの処理を戻す
+          Array.prototype.forEach.call(tmp, value => {
+            value.style = "";
+            value.onclick = function () { CA_showSelectNum(this); };
+          });
+        }
+      });
+    }
     name.style = "width: 40%;";
     name.textContent = obj.goodsName;
 
@@ -116,16 +130,14 @@ function CA_reloadCart() {
     num.style = "width: 30px;";
     num.value = obj.num;
     num.oninput = function () {
-      // CA_cartList[index].num = CA_keepPositive(this);
       this.value = this.value < 1 ? 1 : this.value;
       CA_cartList[index].num = this.value;
       subtotal.value = CA_cartList[index].num * CA_cartList[index].price;
       CA_calcTotalPrice();
     }
 
-    var del = document.createElement("input");
-    del.type = "button";
-    del.value = "削除";
+    var del = document.createElement("button");
+    del.textContent = "削除";
     del.index = index;
     del.onclick = () => CA_removeCartList(this.index);
 
