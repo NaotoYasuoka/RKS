@@ -41,7 +41,7 @@ const DB_GalleyAttributes = ["orderLogId", "goodsObjectId", "team", "state", "nu
 
 // 取得時の返り値の辞書設定
 const DB_GoodsElement = ["objectId", "galleyMode", "inStock", "goodsName", "price", "isNewest"];
-const DB_OrderLogElement = ["orderLogId", "goodsObjectId", "orderDate", "number", "subtotal"];
+const DB_OrderLogElement = ["orderLogId", "goodsObjectId", "orderDate", "number", "subtotal", "seatNum"];
 const DB_GalleyElement = ["orderLogId", "goodsObjectId", "team", "state", "number", "seatNum"];
 
 // 各テーブルの主キー
@@ -284,12 +284,12 @@ var NCMB_DeleteRecord = function (success, failed, table, args) {
             .then(function () {
               success();
             })
-            .catch(function () {
-              failed();
+            .catch(function (err) {
+              failed(err);
             })
         })
         .catch(function (err) {
-          failed();
+          failed(err);
         });
       break;
     case ("OrderLog"):
@@ -302,12 +302,12 @@ var NCMB_DeleteRecord = function (success, failed, table, args) {
             .then(function () {
               success();
             })
-            .catch(function () {
-              failed();
+            .catch(function (err) {
+              failed(err);
             })
         })
         .catch(function (err) {
-          failed();
+          failed(err);
         });
       break;
     case ("Galley"):
@@ -321,12 +321,12 @@ var NCMB_DeleteRecord = function (success, failed, table, args) {
             .then(function () {
               success();
             })
-            .catch(function () {
-              failed();
+            .catch(function (err) {
+              failed(err);
             })
         })
         .catch(function (err) {
-          failed();
+          failed(err);
         });
       break;
     default:
@@ -337,21 +337,35 @@ var NCMB_DeleteRecord = function (success, failed, table, args) {
 
 // 使用例
 // translateIdsToNames([商品番号, ...]).then(function(r){成功時の処理}).catch(function(e){失敗時の処理});
-function translateIdsToNames(ids) {
+function translateIdsToNames(ids, getPrice = false) {
   return new Promise(function (resolve, reject) {
-    NCMB_TranslateIdsToNames(function (r) { resolve(r); }, function (e) { reject(e); }, ids);
+    NCMB_TranslateIdsToNames(function (r) { resolve(r); }, function (e) { reject(e); }, ids, getPrice);
   });
 }
-function NCMB_TranslateIdsToNames(success, failed, ids) {
-  var names = [];
+function NCMB_TranslateIdsToNames(success, failed, ids, getPrice) {
+  // 結果を格納する配列
+  var result = [];
   pullRecords("Goods", true)
     .then(function (r) {
-      GoodsList = r;
-      var nameList = [];
-      var idList = [];
-      GoodsList.forEach(function (value) { idList.push(value.objectId); nameList.push(value.goodsName); })
-      ids.forEach(function (value) { names.push(nameList[idList.indexOf(value)]) });
-      success(names);
+      if (getPrice) {
+        var namePriceList = [];
+        var idList = [];
+        r.forEach(value => {
+          idList.push(value.objectId);
+          namePriceList.push([value.goodsName, value.price]);
+        })
+        ids.forEach(value => result.push(namePriceList[idList.indexOf(value)]));
+      }
+      else {
+        var nameList = [];
+        var idList = [];
+        r.forEach(value => {
+          idList.push(value.objectId);
+          nameList.push(value.goodsName);
+        })
+        ids.forEach(value => result.push(nameList[idList.indexOf(value)]));
+      }
+      success(result);
     })
     .catch(function (e) {
       failed(e);

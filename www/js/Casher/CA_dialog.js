@@ -17,5 +17,5 @@ function CA_selectNum(id) {
   };
 }
 function CA_keepPositive(obj) {
-  obj.value = obj.value < 1 ? 1 : obj.value;
+  if(obj.value < 1) obj.value = 1;
 }

@@ -1,27 +1,17 @@
 <ons-alert-dialog id="OL_dialog" cancelable animation="none">
-  <ons-col width=0% style="height: 60%; overflow-y: scroll;">
-  <div id="PM_addPE_Title" class="alert-dialog-title">注文編集</div>
-  <ons-list>
-    <ons-list-header>注文情報</ons-list-header>
-    <ons-list-item>
-      <div id="OL_OrderDate"></div>
-    </ons-list-item>
-    <ons-list-item>
-      <div id="OL_seatNum"></div>
-    </ons-list-item>
-    <ons-list-header>注文商品情報</ons-list-header>
-    <ons-list-item >
-      <input type="number" id="OD_textbox" class="text-input" placeholder="個数">
-      <div class="right">
-        <ons-button onclick="OD_selectNum('textbox_1')" class="coler_back_red">決定</ons-button>
-      </div>
-    </ons-list-item>
-    <!-- <ons-list-item>
-      <div class="right">
-        <ons-button onclick="saveGoods('PM_dialog')" id="PM_addButton" class="coler_back_red">　　決定　　</ons-button>
-      </div>
-    </ons-list-item> -->
-
-  </ons-list>
-  </ons-col>
+	<div id="PM_addPE_Title" class="alert-dialog-title">注文編集</div>
+	<ons-list>
+		<ons-list-header>注文情報</ons-list-header>
+		<ons-list-item>
+			<div id="OL_OrderDate" style="width=100%;"></div>
+		</ons-list-item>
+		<ons-list-item>
+			<div id="OL_seatNum" style="width=100%;"></div>
+		</ons-list-item>
+		<ons-list-header>注文商品情報</ons-list-header>
+		<div id="OL_goodsInfo" style="width=100%;"></div>
+		<div style="width=100%; padding: 5px 5px; display: flex;flex-direction: row;flex-wrap: wrap;justify-content: space-around;">
+			<ons-button style="background: red;" onclick="hideDialog(&quot;OL_dialog&quot;)">キャンセル</ons-button>
+			<ons-button style="background: red" onclick="OL_pushEditedData()">決定</ons-button>
+		</div>
 </ons-alert-dialog>
