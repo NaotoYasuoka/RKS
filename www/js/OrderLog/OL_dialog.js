@@ -77,20 +77,24 @@ function OL_reloadGoods(group) {
   OL_targetOrderLog.slice(startIndex, endIndex).forEach(value => {
     var goods = document.createElement("ons-list-item")
 
-    var nameLabel = document.createElement("label")
+    var nameLabel = document.createElement("div")
     nameLabel.textContent = value.goodsName
     nameLabel.style = "width: 70%; font-size: 1.1em;"
+    nameLabel.className = "CancelTextButton"
+    nameLabel.onclick = () => {
+      num.value = 0
+      value.newNumber = num.value
+      subtotal.textContent = "￥" + (value.newNumber * value.goodsPrice).toLocaleString()
+      OL_culcTotal()
+    }
 
     var row = document.createElement("div")
-    row.style = "width: 100%;"
-
-    var priceLabel = document.createElement("label")
-    priceLabel.textContent = "￥" + value.goodsPrice.toLocaleString()
-    priceLabel.style = "width: 30%; text-align: right;"
+    row.textContent = "個数："
+    row.style = "width: 100%; padding: 5px;"
 
     var num = document.createElement("input")
     num.type = "number"
-    num.style = "width: 30%; font-size: 1.15em; text-align: right;"
+    num.style = "width: 20%; font-size: 1.15em; text-align: right;"
     num.value = value.newNumber
     num.oninput = () => {
       if (num.value < 0) num.value = 0
@@ -99,27 +103,15 @@ function OL_reloadGoods(group) {
       OL_culcTotal()
     }
 
-    var subtotal = document.createElement("label")
-    subtotal.style = "width: 70%; text-align: right;"
+    var subtotal = document.createElement("div")
+    subtotal.style = "width: 30%; text-align: right; display: inline-block; _display: inline;"
     subtotal.textContent = "￥" + value.subtotal.toLocaleString()
-
-    var deleteButton = document.createElement("ons-button")
-    deleteButton.textContent = "×"
-    deleteButton.style = "background: red; position: absolute; top: 0; right: 0; border-radius: 100%;"
-    deleteButton.onclick = () => {
-      num.value = 0
-      value.newNumber = num.value
-      subtotal.textContent = "￥" + (value.newNumber * value.goodsPrice).toLocaleString()
-      OL_culcTotal()
-    }
 
     OL_goodsInfo.appendChild(goods)
     goods.appendChild(nameLabel)
     goods.appendChild(row)
-    row.appendChild(priceLabel)
     row.appendChild(num)
     row.appendChild(subtotal)
-    goods.appendChild(deleteButton)
   })
 
   var row = document.createElement("div")

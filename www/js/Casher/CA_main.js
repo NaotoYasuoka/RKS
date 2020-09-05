@@ -96,7 +96,7 @@ function CA_reloadCart() {
     nItem.style = "height: 50px;"
     nItem.id = "CA_cartRow";
 
-    var name = document.createElement("button");
+    var name = document.createElement("div");
     // カート内の商品の変更
     name.onclick = function () {
       var tmp = document.getElementsByClassName("CA_button");
@@ -117,15 +117,16 @@ function CA_reloadCart() {
       });
     }
     name.style = "width: 40%; font-size: 1.2em;";
+    name.className = "TextButton";
     name.textContent = obj.goodsName;
 
-    var subtotal = document.createElement("label");
+    var subtotal = document.createElement("div");
     subtotal.style = "width: 40%; text-align: right; font-size: 1.5em;";
     subtotal.textContent = "￥" + (obj.price * obj.num).toLocaleString();
 
     var num = document.createElement("input");
     num.type = "number";
-    num.style = "width: 30px; font-size: 1.2em;";
+    num.style = "width: 50px; font-size: 1.2em;";
     num.value = obj.num;
     num.oninput = function () {
       num.value = num.value < 1 ? 1 : num.value;
