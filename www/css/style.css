@@ -1,14 +1,25 @@
 /**/
 table{
   border-collapse: collapse;
-  border:solid 1px #aaaaaa;
+  border:solid 1px #d69b58;
   width: 100%;
 }
 th, td{
   border-collapse: collapse;
-  border:solid 1px #aaaaaa;
+  border:solid 1px #d69b58;
   padding : 10px 5px;
 }
+
+tr{
+  border-collapse: collapse;
+  border:solid 1.5px #d69b58;
+  padding : 10px 5px;
+}
+
+table tr:nth-child(odd){
+  background-color: #d69b5815
+}
+
 
 #result {
   color: red;
@@ -28,6 +39,8 @@ th, td{
   overflow: hidden;
   background-color: white;/*半透明カラーの色*/
 }
+
+
 
 .background::before{
   content: '';

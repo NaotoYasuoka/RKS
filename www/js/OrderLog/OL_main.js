@@ -110,13 +110,16 @@ function makeRow(tableID, dbname, obj, goodsNameList, fixed) {
           var td = document.createElement('td');
           td.style.textAlign = "center";
           td.rowSpan = c;
-          td.innerHTML = obj[i][fixed] + "<br><br><span style='float: right;'><input type='button' id=" + "OL_button_" + obj[i]["orderLogId"] + " value='編集' onclick='getID(this.id);'></spen>";
+          td.style.background = "white";
+          const date = obj[i][fixed].replace('_', ' ')
+          td.innerHTML = date + "<span style='float: right;'><input type='button' id=" + "OL_button_" + obj[i]["orderLogId"] + " value='編集' onclick='getID(this.id);'></spen>";
           tr.appendChild(td);
           break;
         case "Galley":
           var td = document.createElement('td');
           td.style.textAlign = "center";
           td.rowSpan = c;
+          td.style.background = "white";
           if (obj[i][fixed] != -1) {
             td.innerHTML = obj[i][fixed];
           } else {
@@ -145,7 +148,8 @@ function makeRow(tableID, dbname, obj, goodsNameList, fixed) {
           var td = document.createElement('td');
           td.style.textAlign = "center";
           td.rowSpan = c;
-          td.innerHTML = sum_price;
+          td.style.background = "white";
+          td.innerHTML = "￥."+sum_price;
           tr.appendChild(td);
         }
         break;
@@ -228,8 +232,10 @@ function OD_makeCell(tr, obj, goodsNameList, i) {
   tr.appendChild(td);
   // 状態の表示
   var td = document.createElement('td');
-  td.className = "OD_table5";
+  //td.className = "OD_table5";
   td.style.textAlign = "center";
+  td.className = "stateColor_"+String(i);
+  // td.id = "stateColor_"+String(i);
   td.innerHTML = stateObjects[obj[i]["state"]];
   tr.appendChild(td);
   // ボタンの作成
@@ -342,13 +348,13 @@ function PM_editDialog(obj, ClickInfoObjects) {
 //   for(; i <= 6;i++){
 // =======
 function OD_editDialog(obj, ClickInfoObjects) {
-  goodsNum = obj[ClickInfoObjects.num]["number"];
-  for (var i = 0; i <= goodsList; i++){
+  var goodsNum = obj[ClickInfoObjects.num]["number"];
+  for (var i = 1; i <= goodsNum; i++){
     var buttonID = "OD_button_" + String(i);
     var button_value = document.getElementById(buttonID);
     button_value.disabled = false;
   }
-  for (var i = goodsNum + 1; i <= 6; i++) {
+  for (; i <= 6; i++) {
     var buttonID = "OD_button_" + String(i);
     var button_value = document.getElementById(buttonID);
     button_value.disabled = true;

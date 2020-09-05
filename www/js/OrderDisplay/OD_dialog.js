@@ -8,6 +8,9 @@ function OD_selectNum(obj, id){
   }else{
     selectNum = document.getElementById("OD_textbox").value;
   }
+  var carousel = document.getElementById('carousel');
+  alert(carousel.getActiveIndex());
+
   if(Number(selectNum) && selectNum >= 0){
     var GoodsNum = obj[ClickInfoObjects.num]["number"];
     if(selectNum <= GoodsNum){
