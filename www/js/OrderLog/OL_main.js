@@ -234,7 +234,7 @@ function OD_makeCell(tr, obj, goodsNameList, i) {
   var td = document.createElement('td');
   //td.className = "OD_table5";
   td.style.textAlign = "center";
-  td.className = "stateColor_"+String(i);
+  td.className = "stateColor_"+obj[i]["inCharge"];
   // td.id = "stateColor_"+String(i);
   td.innerHTML = stateObjects[obj[i]["state"]];
   tr.appendChild(td);

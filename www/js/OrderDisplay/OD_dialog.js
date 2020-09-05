@@ -9,7 +9,7 @@ function OD_selectNum(obj, id){
     selectNum = document.getElementById("OD_textbox").value;
   }
   var carousel = document.getElementById('carousel');
-  alert(carousel.getActiveIndex());
+  var carouselNum = carousel.getActiveIndex()+1;
 
   if(Number(selectNum) && selectNum >= 0){
     var GoodsNum = obj[ClickInfoObjects.num]["number"];
@@ -17,8 +17,12 @@ function OD_selectNum(obj, id){
       hideDialog("OD_dialog");
       if(GoodsNum == selectNum){
         editRecord("Galley", obj[ClickInfoObjects.num]["orderLogId"], obj[ClickInfoObjects.num]["goodsObjectId"], obj[ClickInfoObjects.num]["team"], "state", 1).then(function(r){
-          EndLoading();
-          loadTable("OD_table","Galley","seatNum");
+          editRecord("Galley", obj[ClickInfoObjects.num]["orderLogId"], obj[ClickInfoObjects.num]["goodsObjectId"], obj[ClickInfoObjects.num]["team"], "inCharge", Number(carouselNum)).then(function(r){
+            EndLoading();
+            loadTable("OD_table","Galley","seatNum");
+          }).catch(function (e){
+            alert(e);
+          });
         }).catch(function (e){
           alert(e);
         });
@@ -29,7 +33,7 @@ function OD_selectNum(obj, id){
                  obj[ClickInfoObjects.num]["goodsObjectId"] == obj[i]["goodsObjectId"]; i++, j++);
         var remaining = GoodsNum - selectNum;
         editRecord("Galley", obj[ClickInfoObjects.num]["orderLogId"], obj[ClickInfoObjects.num]["goodsObjectId"], obj[ClickInfoObjects.num]["team"], "number", Number(remaining)).then(function(r){
-          addRecord("Galley", obj[ClickInfoObjects.num]["orderLogId"], obj[ClickInfoObjects.num]["goodsObjectId"], j, 1, Number(selectNum), obj[ClickInfoObjects.num]["seatNum"]).then(function(r){
+          addRecord("Galley", obj[ClickInfoObjects.num]["orderLogId"], obj[ClickInfoObjects.num]["goodsObjectId"], j, 1, Number(selectNum), obj[ClickInfoObjects.num]["seatNum"], Number(carouselNum)).then(function(r){
             EndLoading();
             loadTable("OD_table","Galley","seatNum");
           }).catch(function(e){
@@ -73,16 +77,20 @@ function OD_updateState(obj, id){
   }else if(ButtonInfoObjects.state == "back"){
     let backState = obj[ButtonInfoObjects.num]["state"] - 1;
     editRecord("Galley", obj[ButtonInfoObjects.num]["orderLogId"], obj[ButtonInfoObjects.num]["goodsObjectId"], obj[ButtonInfoObjects.num]["team"], "state", Number(backState)).then(function(r){
-      EndLoading();
-      loadTable("OD_table","Galley","seatNum");
+      if( 0 == backState){
+        editRecord("Galley", obj[ButtonInfoObjects.num]["orderLogId"], obj[ButtonInfoObjects.num]["goodsObjectId"], obj[ButtonInfoObjects.num]["team"], "inCharge", Number(0)).then(function(r){
+          EndLoading();
+          loadTable("OD_table","Galley","seatNum");
+        }).catch(function (e){
+          alert(e);
+        });
+      }else{
+        EndLoading();
+        loadTable("OD_table","Galley","seatNum");
+      }
     }).catch(function (e){
       alert(e);
     });
-    // if( 0 == nextState){
-
-    // }else{
-
-    // } 
   }else{
     alert("Error:")
   }
