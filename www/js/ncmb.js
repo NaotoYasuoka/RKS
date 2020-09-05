@@ -7,7 +7,7 @@
 ===取得時の辞書のキー名===
 商品テーブル ["objectId", "galleyMode", "inStock", "goodsName", "price", "isNewest"];
 注文履歴テーブル ["orderLogId", "goodsObjectId", "orderDate", "number", "subtotal", "seatNum"];
-厨房テーブル ["orderLogId", "goodsObjectId", "team", "state", "number", "seatNum"];
+厨房テーブル ["orderLogId", "goodsObjectId", "team", "state", "number", "seatNum", "inCharge"];
 
 ===使用例===
 addRecord("Goods", 1, 1, "タピオカ", 150, 1)
@@ -42,7 +42,7 @@ const DB_GalleyAttributes = ["orderLogId", "goodsObjectId", "team", "state", "nu
 // 取得時の返り値の辞書設定
 const DB_GoodsElement = ["objectId", "galleyMode", "inStock", "goodsName", "price", "isNewest"];
 const DB_OrderLogElement = ["orderLogId", "goodsObjectId", "orderDate", "number", "subtotal", "seatNum"];
-const DB_GalleyElement = ["orderLogId", "goodsObjectId", "team", "state", "number", "seatNum"];
+const DB_GalleyElement = ["orderLogId", "goodsObjectId", "team", "state", "number", "seatNum", "inCharge"];
 
 // 各テーブルの主キー
 const DB_GoodsKeys = ["objectId"];
@@ -97,6 +97,8 @@ function NCMB_AddRecord(success, failed, table, args) {
         var galley = new DB_Galley();
         for (var i = 0; i < DB_GalleyAttributes.length; ++i)
           galley.set(DB_GalleyAttributes[i], args[i]);
+        // 担当を追加でセット
+        galley.set("inCharge", 0)
         galley.save()
           .then(function (obj) {
             success(obj);
