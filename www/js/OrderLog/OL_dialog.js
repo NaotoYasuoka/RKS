@@ -30,6 +30,7 @@ function OL_culcTotal() {
   })
   OL_previousTotal.textContent = "￥" + preTotal.toLocaleString()
   OL_currentTotal.textContent = "￥" + curTotal.toLocaleString()
+  OL_difTotal.textContent = (curTotal - preTotal).toLocaleString()
 }
 
 function OL_setValues() {
@@ -84,7 +85,7 @@ function OL_reloadGoods(group) {
     row.style = "width: 100%;"
 
     var priceLabel = document.createElement("label")
-    priceLabel.textContent = "￥" + value.goodsPrice
+    priceLabel.textContent = "￥" + value.goodsPrice.toLocaleString()
     priceLabel.style = "width: 30%; text-align: right;"
 
     var num = document.createElement("input")
@@ -94,13 +95,13 @@ function OL_reloadGoods(group) {
     num.oninput = () => {
       if (num.value < 0) num.value = 0
       value.newNumber = num.value
-      subtotal.textContent = "￥" + value.newNumber * value.goodsPrice
+      subtotal.textContent = "￥" + (value.newNumber * value.goodsPrice).toLocaleString()
       OL_culcTotal()
     }
 
     var subtotal = document.createElement("label")
     subtotal.style = "width: 70%; text-align: right;"
-    subtotal.textContent = "￥" + value.subtotal
+    subtotal.textContent = "￥" + value.subtotal.toLocaleString()
 
     var deleteButton = document.createElement("ons-button")
     deleteButton.textContent = "×"
@@ -108,7 +109,7 @@ function OL_reloadGoods(group) {
     deleteButton.onclick = () => {
       num.value = 0
       value.newNumber = num.value
-      subtotal.textContent = "￥" + value.newNumber * value.goodsPrice
+      subtotal.textContent = "￥" + (value.newNumber * value.goodsPrice).toLocaleString()
       OL_culcTotal()
     }
 

@@ -10,12 +10,15 @@
 		</ons-list-item>
 		<ons-list-header>注文商品情報</ons-list-header>
 		<div id="OL_goodsInfo" style="width: 100%;"></div>
-		<div style="width=100%; padding: 5px 5px; display: flex;flex-direction: row;flex-wrap: wrap;justify-content: space-around;">
-			<div id="OL_previousTotal" style="text-align: right;"></div>
-			<div>→</div>
-			<div id="OL_currentTotal" style="text-align: right;"></div>
+		<div style="width: 100%; padding: 5px;">
+			<div style="width:100%; padding: 5px; display: flex;flex-direction: row;flex-wrap: wrap;justify-content: space-around;">
+				<div id="OL_previousTotal" style="text-align: right;"></div>
+				<div>→</div>
+				<div id="OL_currentTotal" style="text-align: right;"></div>
+			</div>
+			<div id="OL_difTotal" style="width:100%; text-align: center"></div>
 		</div>
-		<div style="width=100%; padding: 5px 5px; display: flex;flex-direction: row;flex-wrap: wrap;justify-content: space-around;">
+		<div style="width:100%; padding: 5px; display: flex;flex-direction: row;flex-wrap: wrap;justify-content: space-around;">
 			<ons-button style="background: red;" onclick="hideDialog(&quot;OL_dialog&quot;)">キャンセル</ons-button>
 			<ons-button style="background: blue;" onclick="OL_pushEditedData()">　決　定　</ons-button>
 		</div>
