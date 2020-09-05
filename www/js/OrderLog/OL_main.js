@@ -326,8 +326,13 @@ function PM_editDialog(obj, ClickInfoObjects){
 }
 
 function OD_editDialog(obj, ClickInfoObjects){
-  goodsNum = obj[ClickInfoObjects.num]["number"];
-  for(var i=goodsNum+1; i <= 6;i++){
+  var goodsNum = obj[ClickInfoObjects.num]["number"];
+  for(var i=0; i <= goodsNum; i++){
+    var buttonID = "OD_button_" + String(i);
+    var button_value = document.getElementById(buttonID);
+    button_value.disabled = false;
+  }
+  for(; i <= 6;i++){
     var buttonID = "OD_button_" + String(i);
     var button_value = document.getElementById(buttonID);
     button_value.disabled = true;
