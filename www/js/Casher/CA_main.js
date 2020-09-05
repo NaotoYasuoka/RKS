@@ -5,6 +5,7 @@ var CA_cartObj;
 var CA_totalPrice;
 var CA_buttonElement;
 var CA_cartElement;
+var CA_goodsList;
 
 document.addEventListener('init', function (event) {
   if (event.target.matches('#CA_main')) {
@@ -14,6 +15,7 @@ document.addEventListener('init', function (event) {
     CA_buttonElement.splice(CA_buttonElement.indexOf("isNewest"), 1);
     CA_cartElement = CA_buttonElement;
     CA_cartElement.push("num");
+    CA_goodsList = document.getElementById("CA_goodsList");
   }
 }, false);
 
@@ -38,7 +40,7 @@ function CA_loadGoods(r) {
     if (index % 3 == 0) {
       nRow = document.createElement("div");
       nRow.className = "CA_row";
-      document.getElementById("CA_goodsList").appendChild(nRow);
+      CA_goodsList.appendChild(nRow);
     }
     var button = document.createElement("ons-button");
     if (obj.inStock == 1) CA_buttonElement.forEach(value => { button[value] = obj[value]; });
@@ -106,8 +108,9 @@ function CA_reloadCart() {
         // 変更の処理
         value.onclick = function () {
           CA_selectedGoodsObj = this;
-          CA_addCart(obj.num);
+          var num = obj.num;
           CA_removeCartList(index);
+          CA_addCart(num);
           // 商品ボタンの処理を戻す
           Array.prototype.forEach.call(tmp, value => {
             value.style = "";
@@ -139,13 +142,23 @@ function CA_reloadCart() {
     var del = document.createElement("button");
     del.textContent = "削除";
     del.index = index;
-    del.onclick = () => CA_removeCartList(this.index);
+    del.onclick = () => {
+      alert(del.index + "番目:" + CA_cartList[del.index])
+      CA_removeCartList(del.index);
+    }
 
     nItem.appendChild(name);
     nItem.appendChild(num);
     nItem.appendChild(subtotal);
     nItem.appendChild(del);
   });
+}
+
+function CA_removeCartList(i) {
+  CA_cartList.splice(i, 1);
+
+  CA_reloadCart();
+  CA_calcTotalPrice();
 }
 
 function CA_calcTotalPrice() {
@@ -184,36 +197,27 @@ function CA_pushDB(seatNum) {
       while (CA_cartList.length) {
         var value = CA_cartList.shift();
         addRecord("OrderLog", orderId, value.objectId, currentDate, value.num, value.price * value.num, seatNum)
-          .then(function () {
-            if (value.galleyMode) {
-              addRecord("Galley", orderId, value.objectId, 1, 0, value.num, seatNum)
-                .then(function () {
-                  if (--n == 0) {
-                    alert("Success pushing to DB.");
-                    CA_reloadCart();
-                    CA_calcTotalPrice();
-                  }
-                })
-                .catch(e => alert("Failed to push Galley.\n" + e));
-            }
-            else if (--n == 0) {
-              alert("Success pushing to DB.");
-              CA_reloadCart();
-              CA_calcTotalPrice();
-            }
-          })
           .catch(e => alert("Failed to push OrderLog.\n" + e));
+        if (value.galleyMode) {
+          addRecord("Galley", orderId, value.objectId, 0, 0, value.num, seatNum)
+            .then(function () {
+              if (--n == 0) {
+                alert("Success pushing to DB.");
+                CA_reloadCart();
+                CA_calcTotalPrice();
+              }
+            })
+            .catch(e => alert("Failed to push Galley.\n" + e));
+        }
+        else if (--n == 0) {
+          alert("Success pushing to DB.");
+          CA_reloadCart();
+          CA_calcTotalPrice();
+        }
       }
 
     })
     .catch(e => alert("Failed to pull DB to push.\n" + e));
-}
-
-function CA_removeCartList(i) {
-  CA_cartList.splice(i, 1);
-
-  CA_reloadCart();
-  CA_calcTotalPrice();
 }
 
 /*
