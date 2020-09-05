@@ -2,7 +2,7 @@
 ===登録時の引数の順番===
 商品テーブル ["galleyMode", "inStock", "goodsName", "price", "isNewest"];
 注文履歴テーブル ["orderLogId", "goodsObjectId", "number", "subtotal", "seatNum"];
-厨房テーブル ["orderLogId", "goodsObjectId", "team", "state", "number", "seatNum"];
+厨房テーブル ["orderLogId", "goodsObjectId", "team", "state", "number", "seatNum", "inCharge"];
 
 ===取得時の辞書のキー名===
 商品テーブル ["objectId", "galleyMode", "inStock", "goodsName", "price", "isNewest"];
@@ -37,7 +37,7 @@ var DB_Galley = ncmb.DataStore("Galley");
 // 登録時の引数の順番は各テーブル以下の配列の順番に合わせてください
 const DB_GoodsAttributes = ["galleyMode", "inStock", "goodsName", "price", "isNewest"];
 const DB_OrderLogAttributes = ["orderLogId", "goodsObjectId", "orderDate", "number", "subtotal", "seatNum"];
-const DB_GalleyAttributes = ["orderLogId", "goodsObjectId", "team", "state", "number", "seatNum"];
+const DB_GalleyAttributes = ["orderLogId", "goodsObjectId", "team", "state", "number", "seatNum", "inCharge"];
 
 // 取得時の返り値の辞書設定
 const DB_GoodsElement = ["objectId", "galleyMode", "inStock", "goodsName", "price", "isNewest"];
@@ -98,7 +98,6 @@ function NCMB_AddRecord(success, failed, table, args) {
         for (var i = 0; i < DB_GalleyAttributes.length; ++i)
           galley.set(DB_GalleyAttributes[i], args[i]);
         // 担当を追加でセット
-        galley.set("inCharge", 0)
         galley.save()
           .then(function (obj) {
             success(obj);

@@ -197,7 +197,7 @@ function CA_pushDB(seatNum) {
         addRecord("OrderLog", orderId, value.objectId, currentDate, value.num, value.price * value.num, seatNum)
           .catch(e => alert("Failed to push OrderLog.\n" + e));
         if (value.galleyMode) {
-          addRecord("Galley", orderId, value.objectId, 0, 0, value.num, seatNum)
+          addRecord("Galley", orderId, value.objectId, 0, 0, value.num, seatNum, 0)
             .then(function () {
               if (--n == 0) {
                 alert("Success pushing to DB.");
@@ -216,41 +216,4 @@ function CA_pushDB(seatNum) {
 
     })
     .catch(e => alert("Failed to pull DB to push.\n" + e));
-}
-
-/*
- * スワイプイベント設定
- */
-function setSwipe(elem) {
-  // let t = document.querySelector(elem);
-  let t = elem;
-  let startX;		// タッチ開始 x座標
-  let startY;		// タッチ開始 y座標
-  let moveX;	// スワイプ中の x座標
-  let moveY;	// スワイプ中の y座標
-  let dist = 30;	// スワイプを感知する最低距離（ピクセル単位）
-
-  // タッチ開始時： xy座標を取得
-  t.addEventListener("touchstart", function (e) {
-    e.preventDefault();
-    startX = e.touches[0].pageX;
-    startY = e.touches[0].pageY;
-  });
-
-  // スワイプ中： xy座標を取得
-  t.addEventListener("touchmove", function (e) {
-    e.preventDefault();
-    moveX = e.changedTouches[0].pageX;
-    moveY = e.changedTouches[0].pageY;
-  });
-
-  // タッチ終了時： スワイプした距離から左右どちらにスワイプしたかを判定する/距離が短い場合何もしない
-  t.addEventListener("touchend", function (e) {
-    if (startX > moveX && startX > moveX + dist) {		// 右から左にスワイプ
-      alert("右から左");
-    }
-    else if (startX < moveX && startX + dist < moveX) {	// 左から右にスワイプ
-      alert("左から右");
-    }
-  });
 }
