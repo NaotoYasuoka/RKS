@@ -12,3 +12,15 @@
   width:15%;
   border-right: 1px solid rgba(255, 255, 255, 0);
 }
+.CancelTextButton {
+  color: #FF0000;
+  text-decoration: underline;
+}
+.CancelTextButton:hover {
+  color: #DC143C;
+  text-decoration: underline;
+}
+.CancelTextButton:active {
+  color:#8B0000;
+  text-decoration: underline;
+}

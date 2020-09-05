@@ -2,7 +2,6 @@
 var CA_selectedGoodsObj; // CA_main.htmlで選択された商品を記憶する用
 var CA_cartList; // CA_main.htmlの右側、カートのタグ
 var CA_cartObj;
-var CA_totalPrice;
 var CA_buttonElement;
 var CA_cartElement;
 var CA_goodsList;
@@ -10,7 +9,6 @@ var CA_goodsList;
 document.addEventListener('init', function (event) {
   if (event.target.matches('#CA_main')) {
     CA_cartObj = document.getElementById("CA_cart");
-    CA_totalPrice = document.getElementById("CA_totalPrice");
     CA_buttonElement = DB_GoodsElement;
     CA_buttonElement.splice(CA_buttonElement.indexOf("isNewest"), 1);
     CA_cartElement = CA_buttonElement;
@@ -23,7 +21,7 @@ document.addEventListener('show', function (event) {
   if (event.target.matches('#CA_main')) {
     CA_selectedGoodsObj = null;
     CA_cartList = [];
-    CA_totalPrice.value = 0;
+    CA_totalPrice.textContent = "￥" + 0;
     pullRecords("Goods")
       .then(function (r) {
         CA_loadGoods(r);
@@ -51,7 +49,7 @@ function CA_loadGoods(r) {
 
     var t = document.createElement("div");
     t.className = "CA_buttonText";
-    t.textContent = obj.goodsName + "\n" + obj.price;
+    t.textContent = obj.goodsName + "\n￥" + Number(obj.price).toLocaleString();
     button.appendChild(t);
   });
 }
@@ -95,11 +93,10 @@ function CA_reloadCart() {
   // リスト内の商品を配置
   CA_cartList.forEach(function (obj, index) {
     var nItem = document.createElement("ons-list-item");
+    nItem.style = "height: 50px;"
     nItem.id = "CA_cartRow";
-    // nItem.textContent = obj.goodsName;
-    CA_cartObj.appendChild(nItem);
 
-    var name = document.createElement("button");
+    var name = document.createElement("div");
     // カート内の商品の変更
     name.onclick = function () {
       var tmp = document.getElementsByClassName("CA_button");
@@ -119,34 +116,35 @@ function CA_reloadCart() {
         }
       });
     }
-    name.style = "width: 40%;";
+    name.style = "width: 40%; font-size: 1.2em;";
+    name.className = "TextButton";
     name.textContent = obj.goodsName;
 
-    var subtotal = document.createElement("input");
-    subtotal.type = "number";
-    subtotal.style = "width: 40%; text-align: right;";
-    subtotal.value = obj.price * obj.num;
-    subtotal.readOnly = true;
+    var subtotal = document.createElement("div");
+    subtotal.style = "width: 40%; text-align: right; font-size: 1.5em;";
+    subtotal.textContent = "￥" + (obj.price * obj.num).toLocaleString();
 
     var num = document.createElement("input");
     num.type = "number";
-    num.style = "width: 30px;";
+    num.style = "width: 50px; font-size: 1.2em;";
     num.value = obj.num;
     num.oninput = function () {
-      this.value = this.value < 1 ? 1 : this.value;
-      CA_cartList[index].num = this.value;
-      subtotal.value = CA_cartList[index].num * CA_cartList[index].price;
+      num.value = num.value < 1 ? 1 : num.value;
+      CA_cartList[index].num = num.value;
+      subtotal.textContent = "￥" + (CA_cartList[index].num * CA_cartList[index].price).toLocaleString();
       CA_calcTotalPrice();
     }
 
-    var del = document.createElement("button");
-    del.textContent = "削除";
+    var del = document.createElement("ons-button");
+    del.className = "right";
+    del.textContent = "×";
+    del.style = "background: red;border-radius: 100%;";
     del.index = index;
     del.onclick = () => {
-      alert(del.index + "番目:" + CA_cartList[del.index])
       CA_removeCartList(del.index);
     }
 
+    CA_cartObj.appendChild(nItem);
     nItem.appendChild(name);
     nItem.appendChild(num);
     nItem.appendChild(subtotal);
@@ -164,7 +162,7 @@ function CA_removeCartList(i) {
 function CA_calcTotalPrice() {
   var sum = 0;
   CA_cartList.forEach(value => sum += value.num * value.price);
-  CA_totalPrice.value = sum;
+  CA_totalPrice.textContent = "￥" + sum.toLocaleString();
 }
 
 function CA_showSelectSeat() {

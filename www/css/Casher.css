@@ -57,3 +57,16 @@
   font-weight: bold;
   background: red;
 }
+.TextButton {
+  text-align: center;
+  color: #00BFFF;
+  border-bottom: solid 2px  #00BFFF;
+}
+.TextButton:hover {
+  color: #1E90FF;
+  border-bottom: solid 2px  #1E90FF;
+}
+.TextButton:active {
+  color:#0000CD;
+  border-bottom: solid 2px #0000CD;
+}
