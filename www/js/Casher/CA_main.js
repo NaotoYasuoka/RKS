@@ -2,7 +2,6 @@
 var CA_selectedGoodsObj; // CA_main.htmlで選択された商品を記憶する用
 var CA_cartList; // CA_main.htmlの右側、カートのタグ
 var CA_cartObj;
-var CA_totalPrice;
 var CA_buttonElement;
 var CA_cartElement;
 var CA_goodsList;
@@ -10,7 +9,6 @@ var CA_goodsList;
 document.addEventListener('init', function (event) {
   if (event.target.matches('#CA_main')) {
     CA_cartObj = document.getElementById("CA_cart");
-    CA_totalPrice = document.getElementById("CA_totalPrice");
     CA_buttonElement = DB_GoodsElement;
     CA_buttonElement.splice(CA_buttonElement.indexOf("isNewest"), 1);
     CA_cartElement = CA_buttonElement;

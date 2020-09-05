@@ -21,6 +21,17 @@ function OL_removeDialogChildren() {
   while (OL_goodsInfo.firstChild) OL_goodsInfo.removeChild(OL_goodsInfo.firstChild)
 }
 
+function OL_culcTotal() {
+  var preTotal = 0
+  var curTotal = 0
+  OL_targetOrderLog.forEach(value => {
+    preTotal += value.subtotal
+    curTotal += value.goodsPrice * value.newNumber
+  })
+  OL_previousTotal.textContent = "￥" + preTotal.toLocaleString()
+  OL_currentTotal.textContent = "￥" + curTotal.toLocaleString()
+}
+
 function OL_setValues() {
   OL_targetOrderLog = [] // 対象の注文データ格納用
   var targetGoodsObjectIds = [] // 対象のグッズIDを格納
@@ -56,6 +67,7 @@ function OL_setValues() {
 }
 
 function OL_reloadGoods(group) {
+  OL_culcTotal()
   var maxRows = 3 // 一度に表示する商品の数
   var startIndex = group * maxRows
   var endIndex = (startIndex + maxRows < OL_targetOrderLog.length) ? startIndex + maxRows : OL_targetOrderLog.length
@@ -83,6 +95,7 @@ function OL_reloadGoods(group) {
       if (num.value < 0) num.value = 0
       value.newNumber = num.value
       subtotal.textContent = "￥" + value.newNumber * value.goodsPrice
+      OL_culcTotal()
     }
 
     var subtotal = document.createElement("label")
@@ -96,6 +109,7 @@ function OL_reloadGoods(group) {
       num.value = 0
       value.newNumber = num.value
       subtotal.textContent = "￥" + value.newNumber * value.goodsPrice
+      OL_culcTotal()
     }
 
     OL_goodsInfo.appendChild(goods)
@@ -150,15 +164,15 @@ function OL_pushEditedData() {
     }
     else {
       // 更新するデータを頭から取り出していく
-      while (targerData.length > 0) {
-        var data = targerData.shift()
+      targerData.forEach((data, index) => {
+        console.log(JSON.stringify(data))
         // 0個のときは削除
         if (data.newNumber == 0) {
           deleteRecord("OrderLog", data.orderLogId, data.goodsObjectId)
             .catch(e => alert(e))
           deleteRecord("Galley", data.orderLogId, data.goodsObjectId, 0)
             .then(() => {
-              if (targerData.length == 0) {
+              if (targerData.length - 1 == index) {
                 alert("更新完了")
                 hideDialog("OL_dialog")
                 loadTable("OL_table", "OrderLog", "orderDate");
@@ -169,12 +183,12 @@ function OL_pushEditedData() {
         // それ以外は編集して更新
         else {
           // OrderLogとGalley両方を編集
-          editRecord("OrderLog", data.orderLogId, data.goodsObjectId, "number", data.newNumber)
+          editRecord("OrderLog", data.orderLogId, data.goodsObjectId, "number", data.newNumber, "subtotal", data.goodsPrice * data.newNumber)
             .catch(e => alert(e))
 
-          editRecord("Galley", data.orderLogId, data.goodsObjectId, 0, "number", data.newNumber, "subtotal", data.goodsPrice * data.newNumber)
+          editRecord("Galley", data.orderLogId, data.goodsObjectId, 0, "number", data.newNumber)
             .then(() => {
-              if (targerData.length == 0) {
+              if (targerData.length - 1 == index) {
                 alert("更新完了")
                 hideDialog("OL_dialog")
                 loadTable("OL_table", "OrderLog", "orderDate");
@@ -182,7 +196,7 @@ function OL_pushEditedData() {
             })
             .catch(e => alert(e))
         }
-      }
+      })
     }
   })
 }
