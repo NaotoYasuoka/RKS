@@ -30,8 +30,7 @@ function PM_saveGoods(obj, id){
         hideDialog(id);
       }
       if( "addButton" == ClickInfoObjects.state){
-        addRecord("Goods", galley_switch, stock_switch, GoodsName, price, 1).then(function(r){
-          alert(r)
+        addRecord("Goods", galley_switch, stock_switch, GoodsName, Number(price), 1).then(function(r){
           loadTable("PM_table","Goods","goodsObjectId");
         }).catch(function (e){
           alert(e);
@@ -44,7 +43,7 @@ function PM_saveGoods(obj, id){
         });
       }else{
         editRecord("Goods", obj[ClickInfoObjects.num]["objectId"], "isNewest", 0).then(function(r){
-          addRecord("Goods", galley_switch, stock_switch, GoodsName, price, 1).then(function(r){
+          addRecord("Goods", galley_switch, stock_switch, GoodsName, Number(price), 1).then(function(r){
             loadTable("PM_table","Goods","goodsObjectId");
           }).catch(function (e){
             alert(e);
