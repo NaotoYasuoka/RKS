@@ -337,22 +337,14 @@ function PM_editDialog(obj, ClickInfoObjects) {
   }
 }
 
-// <<<<<<< HEAD
-// function OD_editDialog(obj, ClickInfoObjects){
-//   var goodsNum = obj[ClickInfoObjects.num]["number"];
-//   for(var i=0; i <= goodsNum; i++){
-//     var buttonID = "OD_button_" + String(i);
-//     var button_value = document.getElementById(buttonID);
-//     button_value.disabled = false;
-//   }
-//   for(; i <= 6;i++){
-// =======
 function OD_editDialog(obj, ClickInfoObjects) {
   var goodsNum = obj[ClickInfoObjects.num]["number"];
   for (var i = 1; i <= goodsNum; i++){
     var buttonID = "OD_button_" + String(i);
     var button_value = document.getElementById(buttonID);
-    button_value.disabled = false;
+    if(button_value.disabled != false){
+      button_value.disabled = false;
+    }
   }
   for (; i <= 6; i++) {
     var buttonID = "OD_button_" + String(i);
