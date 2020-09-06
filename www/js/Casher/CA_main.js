@@ -34,19 +34,20 @@ document.addEventListener('show', function (event) {
 
 function CA_loadGoods(r) {
   var nRow;
-  var f = false;
+  // var f = false;
   r.forEach(function (obj, index) {
     if (index % 3 == 0) {
       nRow = document.createElement("div");
       nRow.className = "CA_row";
       CA_goodsList.appendChild(nRow);
-      f = !f;
+      // f = !f;
     }
     var button = document.createElement("ons-button");
     if (obj.inStock == 1) CA_buttonElement.forEach(value => { button[value] = obj[value]; });
     else button.disabled = true;
-    if (f) button.style = "background:red;"
-    else button.style = "background:black;"
+    button.style = "background: #d69b58;"
+    // if (f) button.style = "background:red;"
+    // else button.style = "background:black;"
     button.className = "CA_button";
     button.onclick = function () { CA_showSelectNum(this); };
     nRow.appendChild(button);
@@ -103,6 +104,7 @@ function CA_reloadCart() {
       CA_showDialog("CA_dialog3");
       var tmp = document.getElementsByClassName("CA_button");
       Array.prototype.forEach.call(tmp, value => {
+        value.style = "background: maroon";
         // 変更の処理
         value.onclick = function () {
           CA_selectedGoodsObj = this;
@@ -111,6 +113,7 @@ function CA_reloadCart() {
           CA_addCart(num);
           // 商品ボタンの処理を戻す
           Array.prototype.forEach.call(tmp, value_ => {
+            value_.style = "background: #d69b58;";
             CA_hideDialog("CA_dialog3");
             value_.onclick = function () { CA_showSelectNum(this); };
           });
