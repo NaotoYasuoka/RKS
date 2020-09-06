@@ -16,14 +16,15 @@
 		<ons-col id="CA_goodsList" width=65%></ons-col>
 
 		<!-- 右側 -->
-		<ons-col style="height: 100%;">
+		<ons-col width=35% style=" height: 100%;">
 			<!-- カート -->
-			<ons-list id="CA_cart"></ons-list>
-			<!-- </ons-col> -->
-			<!-- <ons-col style="bottom:0px; right:0px; position:fixed; width:30%;"> -->
-			<div type="text" id="CA_totalPrice" readonly style="width: 100%; background: white;" class="money"></div>
-			<ons-button id="CA_decideButton" onclick="CA_showSelectSeat()">決定</ons-button>
-			<!-- </ons-col> -->
+			<ons-list id="CA_cart" style="width: 100%;"></ons-list>
+      <!-- 合計金額 -->
+			<div id="CA_totalPrice" readonly style="width: 100%; background: white;" class="money"></div>
+      <!-- 決定ボタン -->
+			<ons-button id="CA_decideButton" onclick="CA_showSelectSeat()">
+        <div class="CenteringChild">決定</div>
+      </ons-button>
 		</ons-col>
 	</ons-row>
 </ons-page>

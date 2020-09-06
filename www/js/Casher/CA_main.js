@@ -27,7 +27,7 @@ document.addEventListener('show', function (event) {
         CA_loadGoods(r);
       })
       .catch(function (e) {
-        alert(e);
+        ons.notification.alert(e);
       });
   }
 }, false);
@@ -48,7 +48,7 @@ function CA_loadGoods(r) {
     nRow.appendChild(button);
 
     var t = document.createElement("div");
-    t.className = "CA_buttonText";
+    t.className = "CA_buttonText CenteringChild";
     t.textContent = obj.goodsName + "\n￥" + Number(obj.price).toLocaleString();
     button.appendChild(t);
   });
@@ -94,7 +94,9 @@ function CA_reloadCart() {
   CA_cartList.forEach(function (obj, index) {
     var nItem = document.createElement("ons-list-item");
     nItem.style = "height: 50px;"
-    nItem.id = "CA_cartRow";
+
+    var box = document.createElement("div")
+    box.style = "width: 100%; height: 100%; display: flex;flex-direction: row;flex-wrap: wrap;justify-content: space-between; align-items: center;"
 
     var name = document.createElement("div");
     // カート内の商品の変更
@@ -121,7 +123,7 @@ function CA_reloadCart() {
     name.textContent = obj.goodsName;
 
     var subtotal = document.createElement("div");
-    subtotal.style = "width: 40%; text-align: right; font-size: 1.5em;";
+    subtotal.style = "width: 30%; text-align: right; font-size: 1.5em;";
     subtotal.textContent = "￥" + (obj.price * obj.num).toLocaleString();
 
     var num = document.createElement("input");
@@ -135,20 +137,20 @@ function CA_reloadCart() {
       CA_calcTotalPrice();
     }
 
-    var del = document.createElement("ons-button");
-    del.className = "right";
-    del.textContent = "×";
-    del.style = "background: red;border-radius: 100%;";
+    var del = document.createElement("div");
+    del.innerHTML = "<ons-icon icon=fa-trash size=20px></ons-icon>"
+    del.className = "CancelTextButton"
     del.index = index;
     del.onclick = () => {
       CA_removeCartList(del.index);
     }
 
     CA_cartObj.appendChild(nItem);
-    nItem.appendChild(name);
-    nItem.appendChild(num);
-    nItem.appendChild(subtotal);
-    nItem.appendChild(del);
+    nItem.appendChild(box)
+    box.appendChild(name);
+    box.appendChild(num);
+    box.appendChild(subtotal);
+    box.appendChild(del);
   });
 }
 
@@ -183,7 +185,7 @@ function CA_onSelectedSeat(seatNum) {
 
 function CA_pushDB(seatNum) {
   var now = new Date();
-  const currentDate = now.getFullYear() + "/" + (now.getMonth() + 1) + "/" + now.getDate() + "_" + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
+  const currentDate = now.getFullYear() + "/" + (now.getMonth() + 1) + "/" + now.getDate() + " " + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
   var orderId = 1;
   pullRecords("OrderLog")
     .then(function (r) {
@@ -195,25 +197,25 @@ function CA_pushDB(seatNum) {
       while (CA_cartList.length) {
         var value = CA_cartList.shift();
         addRecord("OrderLog", orderId, value.objectId, currentDate, value.num, value.price * value.num, seatNum)
-          .catch(e => alert("Failed to push OrderLog.\n" + e));
+          .catch(e => ons.notification.alert("Failed to push OrderLog.\n" + e));
         if (value.galleyMode) {
           addRecord("Galley", orderId, value.objectId, 0, 0, value.num, seatNum, 0)
             .then(function () {
               if (--n == 0) {
-                alert("Success pushing to DB.");
+                ons.notification.alert("Success pushing to DB.");
                 CA_reloadCart();
                 CA_calcTotalPrice();
               }
             })
-            .catch(e => alert("Failed to push Galley.\n" + e));
+            .catch(e => ons.notification.alert("Failed to push Galley.\n" + e));
         }
         else if (--n == 0) {
-          alert("Success pushing to DB.");
+          ons.notification.alert("Success pushing to DB.");
           CA_reloadCart();
           CA_calcTotalPrice();
         }
       }
 
     })
-    .catch(e => alert("Failed to pull DB to push.\n" + e));
+    .catch(e => ons.notification.alert("Failed to pull DB to push.\n" + e));
 }

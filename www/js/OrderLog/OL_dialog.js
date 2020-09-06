@@ -30,7 +30,11 @@ function OL_culcTotal() {
   })
   OL_previousTotal.textContent = "￥" + preTotal.toLocaleString()
   OL_currentTotal.textContent = "￥" + curTotal.toLocaleString()
-  OL_difTotal.textContent = (curTotal - preTotal).toLocaleString()
+  var t = document.createElement("font")
+  t.style = (curTotal - preTotal) >= 0 ? "color: black;" : "color: red;"
+  t.textContent = "(" + (curTotal - preTotal) + ")"
+  OL_currentTotal.appendChild(t)
+
 }
 
 function OL_setValues() {
@@ -49,7 +53,7 @@ function OL_setValues() {
     }
   })
 
-  if (OL_targetOrderLog == []) alert("error")
+  if (OL_targetOrderLog == []) ons.notification.alert("error")
   else {
     // 会計日時と座席番号をセット
     OL_OrderDate.textContent = "会計日時：" + OL_targetOrderLog[0].orderDate
@@ -77,13 +81,13 @@ function OL_reloadGoods(group) {
   OL_targetOrderLog.slice(startIndex, endIndex).forEach(value => {
     var goods = document.createElement("ons-list-item")
 
-    var nameLabel = document.createElement("div")
-    nameLabel.textContent = value.goodsName
-    nameLabel.style = "width: 70%; font-size: 1.1em;"
-    nameLabel.className = "CancelTextButton"
-    nameLabel.onclick = () => {
+    var nameText = document.createElement("strong")
+    nameText.innerHTML = "<ons-icon icon=fa-trash size=20px>"+value.goodsName+"</ons-icon>"
+    nameText.style = "width: 70%; font-size: 1.1em;"
+    nameText.className = "CancelTextButton"
+    nameText.onclick = () => {
       num.value = 0
-      value.newNumber = num.value
+      value.newNumber = Number(num.value)
       subtotal.textContent = "￥" + (value.newNumber * value.goodsPrice).toLocaleString()
       OL_culcTotal()
     }
@@ -98,27 +102,27 @@ function OL_reloadGoods(group) {
     num.value = value.newNumber
     num.oninput = () => {
       if (num.value < 0) num.value = 0
-      value.newNumber = num.value
+      value.newNumber = Number(num.value)
       subtotal.textContent = "￥" + (value.newNumber * value.goodsPrice).toLocaleString()
       OL_culcTotal()
     }
 
     var subtotal = document.createElement("div")
-    subtotal.style = "width: 30%; text-align: right; display: inline-block; _display: inline;"
-    subtotal.textContent = "￥" + value.subtotal.toLocaleString()
+    subtotal.style = "width: 50%; text-align: right; display: inline-block; _display: inline;"
+    subtotal.textContent = "￥" + (value.goodsPrice * value.newNumber).toLocaleString()
 
     OL_goodsInfo.appendChild(goods)
-    goods.appendChild(nameLabel)
+    goods.appendChild(nameText)
     goods.appendChild(row)
     row.appendChild(num)
     row.appendChild(subtotal)
   })
 
   var row = document.createElement("div")
-  row.style = "width=100%; padding: 5px 5px; display: flex;flex-direction: row;flex-wrap: wrap;justify-content: space-around;"
+  row.style = "width=100%; padding: 5px 5px; display: flex;flex-direction: row;flex-wrap: wrap;justify-content: space-around; align-items: center;"
 
   // 表示する商品を変えるボタン
-  leftButton = document.createElement("ons-button")
+  var leftButton = document.createElement("ons-button")
   leftButton.textContent = "←"
   leftButton.disabled = OL_group <= 0 ? true : false
   leftButton.onclick = () => {
@@ -126,7 +130,10 @@ function OL_reloadGoods(group) {
     OL_reloadGoods(--OL_group)
   }
 
-  rightButton = document.createElement("ons-button")
+  var groupInfo = document.createElement("div")
+  groupInfo.textContent = OL_group + 1 + "/" + Math.ceil(OL_targetOrderLog.length / maxRows)
+
+  var rightButton = document.createElement("ons-button")
   rightButton.textContent = "→"
   rightButton.disabled = endIndex == OL_targetOrderLog.length ? true : false
   rightButton.onclick = () => {
@@ -134,8 +141,10 @@ function OL_reloadGoods(group) {
     OL_reloadGoods(++OL_group)
   }
 
+
   OL_goodsInfo.appendChild(row)
   row.appendChild(leftButton)
+  row.appendChild(groupInfo)
   row.appendChild(rightButton)
 }
 
@@ -153,41 +162,40 @@ function OL_pushEditedData() {
     if (editedData.length != targerData.length) {
       var blockedGoodsNames = []
       editedData.filter(value => { return targerData.indexOf(value) == -1 }).forEach(value => blockedGoodsNames.push(value.goodsName))
-      alert("以下の商品がすでに準備中です。\n" + blockedGoodsNames.join(", "))
+      ons.notification.alert("以下の商品がすでに準備中です。\n" + blockedGoodsNames.join(", "))
     }
     else {
       // 更新するデータを頭から取り出していく
       targerData.forEach((data, index) => {
-        console.log(JSON.stringify(data))
         // 0個のときは削除
         if (data.newNumber == 0) {
           deleteRecord("OrderLog", data.orderLogId, data.goodsObjectId)
-            .catch(e => alert(e))
+            .catch(e => ons.notification.alert(e))
           deleteRecord("Galley", data.orderLogId, data.goodsObjectId, 0)
             .then(() => {
               if (targerData.length - 1 == index) {
-                alert("更新完了")
+                ons.notification.alert("更新完了")
                 hideDialog("OL_dialog")
                 loadTable("OL_table", "OrderLog", "orderDate");
               }
             })
-            .catch(e => alert(e))
+            .catch(e => ons.notification.alert(e))
         }
         // それ以外は編集して更新
         else {
           // OrderLogとGalley両方を編集
           editRecord("OrderLog", data.orderLogId, data.goodsObjectId, "number", data.newNumber, "subtotal", data.goodsPrice * data.newNumber)
-            .catch(e => alert(e))
+            .catch(e => ons.notification.alert(e))
 
           editRecord("Galley", data.orderLogId, data.goodsObjectId, 0, "number", data.newNumber)
             .then(() => {
               if (targerData.length - 1 == index) {
-                alert("更新完了")
+                ons.notification.alert("更新完了")
                 hideDialog("OL_dialog")
                 loadTable("OL_table", "OrderLog", "orderDate");
               }
             })
-            .catch(e => alert(e))
+            .catch(e => ons.notification.alert(e))
         }
       })
     }

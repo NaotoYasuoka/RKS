@@ -84,3 +84,7 @@ table tr:nth-child(odd){
       width: 200px;
       margin: 15px;
     }
+
+.alert-dialog-content {
+  white-space: pre-line;
+}

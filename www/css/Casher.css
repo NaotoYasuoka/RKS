@@ -31,15 +31,16 @@
   overflow-y: scroll;
   background: white;
 }
-.CA_button {
+#CA_main .CA_button {
   width: 30%;
-  height: 95%;
+  height: 100%;
+  display: table;
+  text-align: center;
 }
-.CA_buttonText {
+#CA_main .CA_buttonText {
   font-size: 1.5em;
   font-weight: bold;
   white-space: pre;
-  text-align: center;
 }
 #CA_cart {
   height: 80%;
@@ -56,17 +57,21 @@
   text-align: center;
   font-weight: bold;
   background: red;
+  display: table;
 }
 .TextButton {
-  text-align: center;
   color: #00BFFF;
-  border-bottom: solid 2px  #00BFFF;
+  text-decoration: underline;
 }
 .TextButton:hover {
   color: #1E90FF;
-  border-bottom: solid 2px  #1E90FF;
+  text-decoration: underline;
 }
 .TextButton:active {
   color:#0000CD;
-  border-bottom: solid 2px #0000CD;
+  text-decoration: underline;
+}
+.CenteringChild {
+  vertical-align: middle;
+  display: table-cell;
 }
