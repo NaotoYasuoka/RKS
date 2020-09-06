@@ -149,7 +149,7 @@ function makeRow(tableID, dbname, obj, goodsNameList, fixed) {
           td.style.textAlign = "center";
           td.rowSpan = c;
           td.style.background = "white";
-          td.innerHTML = "￥."+sum_price;
+          td.innerHTML = "￥"+sum_price.toLocaleString();
           tr.appendChild(td);
         }
         break;
@@ -178,7 +178,7 @@ function PM_makeCell(tr, obj, i) {
   var td = document.createElement('td');
   td.style.textAlign = "center";
   if (obj[i]["inStock"] == 1) {
-    td.innerHTML = "<span style='float: center;'>○</span>";
+    td.innerHTML = "<span style='float: center;'>O</span>";
   } else {
     td.innerHTML = "<span style='float: center;'>X</span>";
   }
@@ -188,9 +188,10 @@ function PM_makeCell(tr, obj, i) {
   td.innerHTML = "<span style='float: left;'>" + obj[i]["goodsName"] + "</span> <span style='float: right;'><input type='button' id=" + "PM_button_" + i + " value='編集' onclick='getID(this.id);'> </span>";
   tr.appendChild(td);
   // 値段の表示
+  var money = Number(obj[i]["price"]).toLocaleString();
   var td = document.createElement('td');
   td.style.textAlign = "center";
-  td.innerHTML = "<span style='float: center;'>" + obj[i]["price"] + "</span>";
+  td.innerHTML = "<span style='float: center;'>" + "￥"+money + "</span>";
   tr.appendChild(td);
 
   return tr;
