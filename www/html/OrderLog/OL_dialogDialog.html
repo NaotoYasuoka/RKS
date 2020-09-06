@@ -3,7 +3,9 @@
 	<div id="OL_dialogDialogText" class="alert-dialog-content">
 	</div>
 	<div class="alert-dialog-footer">
-		<ons-alert-dialog-button style="background: purple; color: white;" onclick="OL_hideAlertDialog()">Cancel</ons-alert-dialog-button>
-		<ons-alert-dialog-button style="background: red; color: white; border-radius: 0px 0px 5px 5px;" onclick="OL_hideAlertDialog(true)">OK</ons-alert-dialog-button>
+		<div style="width:100%; display: flex;flex-direction: row;flex-wrap: wrap;justify-content: space-around;">
+			<ons-alert-dialog-button style="width: 30%; color: white; background: purple; text-align: center; font-size: 0.5em; border-radius: 0px 0px 0px 5px;" onclick="OL_hideAlertDialog()">キャンセル</ons-alert-dialog-button>
+			<ons-alert-dialog-button style="width: 70%; color: white; background: red; text-align: center; border-radius: 0px 0px 5px 0px;" onclick="OL_hideAlertDialog(true)">決定</ons-alert-dialog-button>
+		</div>
 	</div>
 </ons-alert-dialog>
