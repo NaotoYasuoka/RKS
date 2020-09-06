@@ -34,15 +34,19 @@ document.addEventListener('show', function (event) {
 
 function CA_loadGoods(r) {
   var nRow;
+  var f = false;
   r.forEach(function (obj, index) {
     if (index % 3 == 0) {
       nRow = document.createElement("div");
       nRow.className = "CA_row";
       CA_goodsList.appendChild(nRow);
+      f = !f;
     }
     var button = document.createElement("ons-button");
     if (obj.inStock == 1) CA_buttonElement.forEach(value => { button[value] = obj[value]; });
     else button.disabled = true;
+    if (f) button.style = "background:red;"
+    else button.style = "background:black;"
     button.className = "CA_button";
     button.onclick = function () { CA_showSelectNum(this); };
     nRow.appendChild(button);
@@ -56,16 +60,11 @@ function CA_loadGoods(r) {
 
 function CA_showSelectNum(goodsObj) {
   CA_selectedGoodsObj = goodsObj;
-  var dialog = document.getElementById('CA_dialog');
-  if (dialog) dialog.show();
-  else {
-    ons.createElement('html/Casher/CA_dialog.html', { append: true })
-      .then(dialog => dialog.show());
-  }
+  CA_showDialog('CA_dialog');
 }
 
 function CA_onSelectedNum(goodsNum) {
-  document.getElementById("CA_dialog").hide();
+  CA_hideDialog("CA_dialog");
   CA_addCart(goodsNum);
 }
 
@@ -93,7 +92,7 @@ function CA_reloadCart() {
   // リスト内の商品を配置
   CA_cartList.forEach(function (obj, index) {
     var nItem = document.createElement("ons-list-item");
-    nItem.style = "height: 50px;"
+    nItem.style = "height: 60px;"
 
     var box = document.createElement("div")
     box.style = "width: 100%; height: 100%; display: flex;flex-direction: row;flex-wrap: wrap;justify-content: space-between; align-items: center;"
@@ -101,9 +100,9 @@ function CA_reloadCart() {
     var name = document.createElement("div");
     // カート内の商品の変更
     name.onclick = function () {
+      CA_showDialog("CA_dialog3");
       var tmp = document.getElementsByClassName("CA_button");
       Array.prototype.forEach.call(tmp, value => {
-        value.style = "background: green;";
         // 変更の処理
         value.onclick = function () {
           CA_selectedGoodsObj = this;
@@ -111,9 +110,9 @@ function CA_reloadCart() {
           CA_removeCartList(index);
           CA_addCart(num);
           // 商品ボタンの処理を戻す
-          Array.prototype.forEach.call(tmp, value => {
-            value.style = "";
-            value.onclick = function () { CA_showSelectNum(this); };
+          Array.prototype.forEach.call(tmp, value_ => {
+            CA_hideDialog("CA_dialog3");
+            value_.onclick = function () { CA_showSelectNum(this); };
           });
         }
       });
@@ -169,17 +168,11 @@ function CA_calcTotalPrice() {
 
 function CA_showSelectSeat() {
   if (!CA_cartList.length) return;
-  var dialog = document.getElementById('CA_dialog2');
-  if (dialog) {
-    dialog.show();
-  } else {
-    ons.createElement('html/Casher/CA_dialog2.html', { append: true })
-      .then(dialog => dialog.show());
-  }
+  CA_showDialog('CA_dialog2');
 }
 
 function CA_onSelectedSeat(seatNum) {
-  document.getElementById("CA_dialog2").hide();
+  CA_hideDialog("CA_dialog2");
   CA_pushDB(seatNum);
 }
 

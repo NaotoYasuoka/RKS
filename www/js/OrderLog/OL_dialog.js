@@ -82,9 +82,8 @@ function OL_reloadGoods(group) {
     var goods = document.createElement("ons-list-item")
 
     var nameText = document.createElement("strong")
-    nameText.innerHTML = "<ons-icon icon=fa-trash size=20px>"+value.goodsName+"</ons-icon>"
-    nameText.style = "width: 70%; font-size: 1.1em;"
-    nameText.className = "CancelTextButton"
+    nameText.innerHTML = "<ons-icon icon=fa-trash size=20px class='CancelTextButton'></ons-icon>" + value.goodsName
+    nameText.style = "font-size: 1.1em;"
     nameText.onclick = () => {
       num.value = 0
       value.newNumber = Number(num.value)
@@ -118,8 +117,10 @@ function OL_reloadGoods(group) {
     row.appendChild(subtotal)
   })
 
+  var onsRow = document.createElement("ons-list-item")
+
   var row = document.createElement("div")
-  row.style = "width=100%; padding: 5px 5px; display: flex;flex-direction: row;flex-wrap: wrap;justify-content: space-around; align-items: center;"
+  row.style = "width:100%; padding: 5px 5px; display: flex;flex-direction: row;flex-wrap: wrap;justify-content: space-around; align-items: baseline;"
 
   // 表示する商品を変えるボタン
   var leftButton = document.createElement("ons-button")
@@ -142,7 +143,8 @@ function OL_reloadGoods(group) {
   }
 
 
-  OL_goodsInfo.appendChild(row)
+  OL_goodsInfo.appendChild(onsRow)
+  onsRow.appendChild(row)
   row.appendChild(leftButton)
   row.appendChild(groupInfo)
   row.appendChild(rightButton)
