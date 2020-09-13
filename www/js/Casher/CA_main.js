@@ -19,6 +19,7 @@ document.addEventListener('init', function (event) {
 
 document.addEventListener('show', function (event) {
   if (event.target.matches('#CA_main')) {
+    makeRegiSidebar();
     CA_selectedGoodsObj = null;
     CA_cartList = [];
     CA_totalPrice.textContent = "￥" + 0;
@@ -29,7 +30,8 @@ document.addEventListener('show', function (event) {
       .catch(function (e) {
         ons.notification.alert(e);
       });
-    makeRegiSidebar();
+    //<ons-list-item onclick= fn.load('html/OrderDisplay/OD_main.html')  modifier= chevron  tappable><div class= left ><img class= list-item__thumbnail  src= image/Galley.png ></div><div class= center >注文表示</div></ons-list-item>
+
   }
 }, false);
 

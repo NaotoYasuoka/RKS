@@ -25,3 +25,9 @@ if (ons.platform.isIPhoneX()) {
   document.documentElement.setAttribute('onsflag-iphonex-portrait', '');
   document.documentElement.setAttribute('onsflag-iphonex-landscape', '');
 }
+
+APP_VERSION = ""
+$.getJSON("version.json", (data) => {
+  APP_VERSION = data.version;
+  console.log(APP_VERSION)
+});

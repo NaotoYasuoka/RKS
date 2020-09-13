@@ -3,7 +3,7 @@
 var OD_cellNum;
 
 document.addEventListener('show', function(event) {
-  if (event.target.matches('#OD_main')) { 
+  if (event.target.matches('#OD_main')) {
     OD_loadTable();
   }
 }, false);
