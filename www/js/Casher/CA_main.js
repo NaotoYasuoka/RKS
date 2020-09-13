@@ -29,6 +29,7 @@ document.addEventListener('show', function (event) {
       .catch(function (e) {
         ons.notification.alert(e);
       });
+    makeRegiSidebar();
   }
 }, false);
 

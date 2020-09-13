@@ -1,5 +1,4 @@
 // js/ProductManagement/PM_dialog
-
 /* 商品編集画面の値の削除 */
 function PM_deleteGoods(obj, id) {
   hideDialog(id);

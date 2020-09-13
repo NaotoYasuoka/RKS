@@ -5,9 +5,7 @@ var PM_cellNum;
 /* 画面遷移時のリロード */
 document.addEventListener('show', function(event) {
   if (event.target.matches('#PM_main')) {
-    
     PM_loadTable();
-
   }
 }, false);
 

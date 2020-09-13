@@ -14,10 +14,13 @@ let ClickInfoObjects = { name: null, state: null, num: -2 };
 document.addEventListener('show', function (event) {
   if (event.target.matches('#PM_main')) {
     loadTable("PM_table", "Goods", "goodsObjectId");
+    makeRegiSidebar();
   } else if (event.target.matches('#OL_main')) {
     loadTable("OL_table", "OrderLog", "orderDate");
+    makeRegiSidebar();
   } else if (event.target.matches('#OD_main')) {
     loadTable("OD_table", "Galley", "seatNum");
+    makeKitchenSidebar();
   } else {
   }
 }, false);

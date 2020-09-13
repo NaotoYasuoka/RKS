@@ -12,15 +12,18 @@
 		<div id="OL_goodsInfo" style="width: 100%;"></div>
 		<ons-list-header>合計金額情報</ons-list-header>
 		<div style="width: 100%; padding: 5px;">
-			<div style="width:100%; padding: 5px; display: flex;flex-direction: row;flex-wrap: wrap;justify-content: space-around;">
-				<div id="OL_previousTotal" style="text-align: right;"></div>
-				<div>→</div>
-				<strong id="OL_currentTotal" style="text-align: right; font-size: 1.2em;"></strong>
+			<div id="OL_totals" style="width:100%; padding: 5px;">
+				<div id="OL_previousTotal" style="min-width: 30%; text-align: right; display: inline-block; _display: inline;"></div>
+				→
+				<div style="display: inline-block; _display: inline;">
+					<strong id="OL_currentTotal" style="font-size: 1.2em;"></strong>
+					<span>(<span id="OL_differenceTotal" style="color: black;"></span>)</span>
+				</div>
 			</div>
 		</div>
-    
+
 		<div style="width:100%; padding-bottom: 5px; display: flex;flex-direction: row;flex-wrap: wrap;justify-content: space-around;">
-			<ons-button style="width: 30%; color: white; background: purple; text-align: center; font-size: 0.5em;" onclick="hideDialog('OL_dialog')">キャンセル</ons-button>
+			<ons-button style="width: 30%; color: white; background: purple; text-align: center; font-size: 0.5em;" onclick="OL_removeAllGoods()">全削除</ons-button>
 			<ons-button style="width: 65%; color: white; background: red; text-align: center;" onclick="OL_createAlertDialog()">決定</ons-button>
 		</div>
 	</ons-list>

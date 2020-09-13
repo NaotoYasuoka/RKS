@@ -30,11 +30,8 @@ function OL_culcTotal() {
   })
   OL_previousTotal.textContent = "￥" + preTotal.toLocaleString()
   OL_currentTotal.textContent = "￥" + curTotal.toLocaleString()
-  var t = document.createElement("font")
-  t.style = (curTotal - preTotal) >= 0 ? "color: black;" : "color: red;"
-  t.textContent = "(" + (curTotal - preTotal) + ")"
-  OL_currentTotal.appendChild(t)
-
+  OL_differenceTotal.style = (curTotal - preTotal) >= 0 ? "color:black;" : "color:red;"
+  OL_differenceTotal.textContent = curTotal - preTotal
 }
 
 function OL_setValues() {
@@ -148,6 +145,12 @@ function OL_reloadGoods(group) {
   row.appendChild(leftButton)
   row.appendChild(groupInfo)
   row.appendChild(rightButton)
+}
+
+function OL_removeAllGoods() {
+  OL_targetOrderLog.forEach(value => value.newNumber = 0)
+  OL_removeDialogChildren()
+  OL_reloadGoods(OL_group)
 }
 
 function OL_pushEditedData() {

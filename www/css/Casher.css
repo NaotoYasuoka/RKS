@@ -38,6 +38,9 @@
   text-align: center;
 }
 #CA_main .CA_buttonText {
+  max-width: 0px;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 1.5em;
   font-weight: bold;
   white-space: pre;

@@ -9,10 +9,10 @@ window.fn.open = function () {
   var menu = document.getElementById('menu');
   menu.open();
 };
-window.fn.open2 = function () {
-  var menu = document.getElementById('menu2');
-  menu.open();
-};
+// window.fn.open2 = function () {
+//   var menu = document.getElementById('menu2');
+//   menu.open();
+// };
 window.fn.load = function (page) {
   var content = document.getElementById('content');
   var menu = document.getElementById('menu');
