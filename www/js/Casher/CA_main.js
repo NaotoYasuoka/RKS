@@ -96,7 +96,7 @@ function CA_reloadCart() {
   // リスト内の商品を配置
   CA_cartList.forEach(function (obj, index) {
     var nItem = document.createElement("ons-list-item");
-    nItem.style = "height: 60px;"
+    nItem.style = "min-height: 60px;"
 
     var box = document.createElement("div")
     box.style = "width: 100%; height: 100%; display: flex;flex-direction: row;flex-wrap: wrap;justify-content: space-between; align-items: center;"
@@ -196,25 +196,25 @@ function CA_pushDB(seatNum) {
       while (CA_cartList.length) {
         var value = CA_cartList.shift();
         addRecord("OrderLog", orderId, value.objectId, currentDate, value.num, value.price * value.num, seatNum)
-          .catch(e => ons.notification.alert("Failed to push OrderLog.\n" + e));
+          .catch(e => ons.notification.alert("注文履歴テーブルへのプッシュに失敗。\n" + e));
         if (value.galleyMode) {
           addRecord("Galley", orderId, value.objectId, 0, 0, value.num, seatNum, 0)
             .then(function () {
               if (--n == 0) {
-                ons.notification.alert("Success pushing to DB.");
+                ons.notification.alert("プッシュ成功。");
                 CA_reloadCart();
                 CA_calcTotalPrice();
               }
             })
-            .catch(e => ons.notification.alert("Failed to push Galley.\n" + e));
+            .catch(e => ons.notification.alert("厨房テーブルへのプッシュに失敗。\n" + e));
         }
         else if (--n == 0) {
-          ons.notification.alert("Success pushing to DB.");
+          ons.notification.alert("プッシュ成功。");
           CA_reloadCart();
           CA_calcTotalPrice();
         }
       }
 
     })
-    .catch(e => ons.notification.alert("Failed to pull DB to push.\n" + e));
+    .catch(e => ons.notification.alert("テーブルのプルに失敗。\n" + e));
 }

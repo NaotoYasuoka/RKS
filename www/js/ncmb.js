@@ -124,7 +124,7 @@ var NCMB_PullRecords = function (success, failed, table, pullAllGoods) {
   switch (table) {
     case ("Goods"):
       if (pullAllGoods) {
-        DB_Goods.fetchAll()
+        DB_Goods.order("goodsName").fetchAll()
           .then(function (objs) {
             objs.forEach(function (obj) {
               var tmp = {};
@@ -140,7 +140,7 @@ var NCMB_PullRecords = function (success, failed, table, pullAllGoods) {
           });
       }
       else {
-        DB_Goods.equalTo("isNewest", 1)
+        DB_Goods.equalTo("isNewest", 1).order("goodsName")
           .fetchAll()
           .then(function (objs) {
             objs.forEach(function (obj) {
