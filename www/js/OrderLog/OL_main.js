@@ -28,10 +28,12 @@ document.addEventListener('show', function (event) {
 
 /* テーブルのロード */
 function loadTable(tableID, dbname, fixed) {
+  BeginLoading();
   pullRecords(dbname).then(function (r) {
     DBObj = r;
     deleteTable(tableID);
     makeTable(tableID, dbname, DBObj, fixed);
+    EndLoading();
   }).catch(function (e) {
     alert(e);
   });
@@ -355,6 +357,7 @@ function OD_editDialog(obj, ClickInfoObjects) {
     var button_value = document.getElementById(buttonID);
     button_value.disabled = true;
   }
+  document.getElementById("OD_textbox").value = ""
 }
 
 function OL_editDialog(obj, ClickInfoObjects) {

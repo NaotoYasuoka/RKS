@@ -24,7 +24,8 @@ function PM_saveGoods(obj, id){
     }
     var GoodsName = document.getElementById('PM_textbox_1').value;
     var price = document.getElementById('PM_textbox_2').value;
-    if(price == Number(price)){
+    if(price != "" && GoodsName != ""){
+      price == Number(price)
       if(GoodsName != "" && price){
         hideDialog(id);
       }

@@ -12,6 +12,7 @@ function OD_selectNum(obj, id){
   var carouselNum = carousel.getActiveIndex()+1;
 
   if(Number(selectNum) && selectNum >= 0){
+    BeginLoading()
     var GoodsNum = obj[ClickInfoObjects.num]["number"];
     if(selectNum <= GoodsNum){
       hideDialog("OD_dialog");
@@ -47,7 +48,7 @@ function OD_selectNum(obj, id){
       alert("キーボードで入力された値が大きすぎます。")
     }
   }else{
-    alert("");
+    alert("入力された値が不適切です。");
   }
 }
 
